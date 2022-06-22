@@ -22,9 +22,27 @@ function SearchBar() {
     });
   };
 
-  const handleSearchButton = () => {
-    console.log(`radioType: ${searchBarData.radioType},
-     inputText: ${searchBarData.inputText}`);
+  const handleSearchButton = async () => {
+    const { radioType, inputText } = searchBarData;
+    if (radioType === 'ingredient-search-radio') {
+      const ingredientSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${inputText}`);
+      const data = await ingredientSearch.json();
+      console.log(data);
+    }
+    if (radioType === 'name-search-radio') {
+      const nameSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${inputText}`);
+      const data = await nameSearch.json();
+      console.log(data);
+    }
+    if (radioType === 'first-letter-search-radio') {
+      if (inputText.length > 1) {
+        global.alert('Your search must have only 1 (one) character');
+      } else {
+        const firstLetterSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${inputText}`);
+        const data = await firstLetterSearch.json();
+        console.log(data);
+      }
+    }
   };
 
   return (
@@ -44,7 +62,7 @@ function SearchBar() {
                 id="ingredient-search-radio"
                 data-testid="ingredient-search-radio"
                 type="radio"
-                value="ingredient-search-radiot"
+                value="ingredient-search-radio"
                 onClick={ handleRadiosInputs }
               />
             </label>
