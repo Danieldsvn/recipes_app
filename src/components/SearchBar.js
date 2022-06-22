@@ -6,6 +6,7 @@ function SearchBar() {
   const [searchBarData, setSearchBarData] = useState({
     inputText: '',
     radioType: '',
+    searchResult: {},
   });
 
   const handleTextInput = ({ target }) => {
@@ -27,12 +28,18 @@ function SearchBar() {
     if (radioType === 'ingredient-search-radio') {
       const ingredientSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${inputText}`);
       const data = await ingredientSearch.json();
-      console.log(data);
+      setSearchBarData({
+        ...searchBarData,
+        searchResult: data,
+      });
     }
     if (radioType === 'name-search-radio') {
       const nameSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${inputText}`);
       const data = await nameSearch.json();
-      console.log(data);
+      setSearchBarData({
+        ...searchBarData,
+        searchResult: data,
+      });
     }
     if (radioType === 'first-letter-search-radio') {
       if (inputText.length > 1) {
@@ -40,7 +47,10 @@ function SearchBar() {
       } else {
         const firstLetterSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${inputText}`);
         const data = await firstLetterSearch.json();
-        console.log(data);
+        setSearchBarData({
+          ...searchBarData,
+          searchResult: data,
+        });
       }
     }
   };
