@@ -4,10 +4,16 @@ import MyContext from './context';
 
 function Provider({ children }) {
   const [data, setData] = useState({});
+  const [allFoods, setAllFoods] = useState([]);
+  const [allDrinks, setAllDrinks] = useState([]);
 
   const INITIAL_STATE = {
     data,
     setData,
+    allFoods,
+    setAllFoods,
+    allDrinks,
+    setAllDrinks,
   };
 
   return (
