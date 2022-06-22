@@ -7,7 +7,11 @@ function SearchBar() {
   return (
     <div>
       {searchBar && (
-        <p> Search Bar</p>
+        <input
+          type="text"
+          data-testid="search-input"
+        />
+
       )}
     </div>
   );
