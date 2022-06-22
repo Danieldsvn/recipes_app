@@ -37,7 +37,7 @@ function Header({ pageTitle, search }) {
           type="button"
           data-testid="search-top-btn"
           onClick={ handleClick }
-          scr={ searchIcon }
+          src={ searchIcon }
           alt="search"
         >
           <img src={ searchIcon } alt="search" />
