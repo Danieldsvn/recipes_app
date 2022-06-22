@@ -8,11 +8,10 @@ import './Footer.css';
 function Footer() {
   const history = useHistory();
   return (
-    <div
+    <footer
       className="footer"
       data-testid="footer"
     >
-      {/* trying stuff */}
       <button
         type="button"
         data-testid="drinks-bottom-btn"
@@ -40,7 +39,7 @@ function Footer() {
       >
         <img src={ mealIcon } alt="SpoonCrossFork" />
       </button>
-    </div>
+    </footer>
   );
 }
 
