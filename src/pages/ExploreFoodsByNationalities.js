@@ -1,8 +1,15 @@
 import React from 'react';
+import Header from '../components/Header';
+import SearchBar from '../components/SearchBar';
 
 function ExploreFoodsByNationalities() {
   return (
-    <div>ExploreFoodsByNationalities</div>
+    <div>
+      <Header pageTitle="Explore Nationalities" search />
+      <SearchBar />
+
+      <div>ExploreFoodsByNationalities</div>
+    </div>
   );
 }
 
