@@ -9,6 +9,7 @@ function Footer() {
   const history = useHistory();
   return (
     <div
+      className="footer"
       data-testid="footer"
     >
       {/* trying stuff */}
