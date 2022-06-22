@@ -4,10 +4,13 @@ import MyContext from './context';
 
 function Provider({ children }) {
   const [data, setData] = useState({});
+  const [searchBar, setSearchBar] = useState(false);
 
   const INITIAL_STATE = {
     data,
     setData,
+    searchBar,
+    setSearchBar,
   };
 
   return (
