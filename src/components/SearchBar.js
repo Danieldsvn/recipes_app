@@ -98,14 +98,14 @@ function SearchBar() {
                 onClick={ handleRadiosInputs }
               />
             </label>
-            <button
-              type="button"
-              data-testid="exec-search-btn"
-              onClick={ handleSearchButton }
-            >
-              Search
-            </button>
           </div>
+          <button
+            type="button"
+            data-testid="exec-search-btn"
+            onClick={ handleSearchButton }
+          >
+            Search
+          </button>
         </div>
       )}
     </div>
