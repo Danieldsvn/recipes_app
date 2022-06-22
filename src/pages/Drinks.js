@@ -8,7 +8,7 @@ function Drinks() {
     <div>
       <Header pageTitle="Drinks" search />
       <SearchBar />
-      <h1>Drinks</h1>      
+      <h1>Drinks</h1>
       <Footer />
     </div>
   );
