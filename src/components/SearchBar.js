@@ -3,19 +3,28 @@ import MyContext from '../context/context';
 
 function SearchBar() {
   const { searchBar } = useContext(MyContext);
-  const [radiosControl, setRadiosControl] = useState({
+  const [searchBarData, setSearchBarData] = useState({
+    inputText: '',
     radioType: '',
   });
 
+  const handleTextInput = ({ target }) => {
+    setSearchBarData({
+      ...searchBarData,
+      inputText: target.value,
+    });
+  };
+
   const handleRadiosInputs = ({ target }) => {
-    console.log(target.value);
-    setRadiosControl({
+    setSearchBarData({
+      ...searchBarData,
       radioType: target.value,
     });
   };
 
   const handleSearchButton = () => {
-    console.log(radiosControl.radioType);
+    console.log(`radioType: ${searchBarData.radioType},
+     inputText: ${searchBarData.inputText}`);
   };
 
   return (
@@ -25,6 +34,7 @@ function SearchBar() {
           <input
             type="text"
             data-testid="search-input"
+            onChange={ handleTextInput }
           />
           <div>
             <label htmlFor="ingredient-search-radio">
