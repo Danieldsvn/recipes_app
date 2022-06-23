@@ -8,9 +8,10 @@ function SearchBar() {
     inputText: '',
     radioType: '',
     searchResult: {},
-    cards: ['', '', ''],
+    cards: [],
     cardType: '',
   });
+  const history = useHistory();
   const location = useLocation();
 
   useEffect(() => {
@@ -35,10 +36,10 @@ function SearchBar() {
       radioType: target.value,
     });
   };
-  const INGREDIENT = 'ingredient-search-radio';
+  const FIRST_LETTER_SEARCH_RADIO = 'first-letter-search-radio';
   const foodSearch = async (radioType, inputText) => {
     let data = [];
-    if (radioType === INGREDIENT) {
+    if (radioType === 'ingredient-search-radio') {
       const ingredientSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${inputText}`);
       data = await ingredientSearch.json();
     }
@@ -46,93 +47,67 @@ function SearchBar() {
       const nameSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${inputText}`);
       data = await nameSearch.json();
     }
-    if (radioType === 'first-letter-search-radio') {
+    if (radioType === FIRST_LETTER_SEARCH_RADIO) {
       const firstLetterSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${inputText}`);
       data = await firstLetterSearch.json();
     }
-    if (data === []) {
+    if (data.meals === null) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    }
-    if (data.meals.length > 1) {
-      setSearchBarData({
-        ...searchBarData,
-        cards: data.meals,
-      });
+    } else {
+      if (data.meals.length > 1) {
+        setSearchBarData({
+          ...searchBarData,
+          cards: data.meals,
+        });
+      }
+      if (data.meals.length === 1) {
+        history.push(`/foods/${data.meals[0].idMeal}`);
+      }
     }
   };
+
   const drinkSearch = async (radioType, inputText) => {
-    let auxData = {};
-    if (radioType === INGREDIENT) {
+    let data = [];
+    if (radioType === 'ingredient-search-radio') {
       const ingredientEndPoint = 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=';
       const ingredientSearch = await fetch(`${ingredientEndPoint}${inputText}`);
-      const data = await ingredientSearch.json();
-      auxData = data;
-      setSearchBarData({
-        ...searchBarData,
-        searchResult: data,
-      });
+      data = await ingredientSearch.json();
     }
     if (radioType === 'name-search-radio') {
       const nameEndPoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
       const nameSearch = await fetch(`${nameEndPoint}${inputText}`);
-      const data = await nameSearch.json();
-      auxData = data;
-      setSearchBarData({
-        ...searchBarData,
-        searchResult: data,
-      });
+      data = await nameSearch.json();
     }
-    if (radioType === 'first-letter-search-radio') {
-      if (inputText.length > 1) {
-        global.alert('Your search must have only 1 (one) character');
-      } else {
-        const firstLetterEndPoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=';
-        const firstLetterSearch = await fetch(`${firstLetterEndPoint}${inputText}`);
-        const data = await firstLetterSearch.json();
-        auxData = data;
+    if (radioType === FIRST_LETTER_SEARCH_RADIO) {
+      const firstLetterEndPoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=';
+      const firstLetterSearch = await fetch(`${firstLetterEndPoint}${inputText}`);
+      data = await firstLetterSearch.json();
+    }
+    if (data.drinks === null) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    } else {
+      if (data.drinks.length > 1) {
         setSearchBarData({
           ...searchBarData,
-          searchResult: data,
+          cards: data.drinks,
         });
       }
-    }
-
-    if (auxData.drinks === null) {
-      global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    }
-    if (auxData.drinks.length > 1) {
-      setSearchBarData({
-        ...searchBarData,
-        cards: auxData.drinks,
-      });
+      if (data.drinks.length === 1) {
+        history.push(`/drinks/${data.drinks[0].idDrink}`);
+      }
     }
   };
 
   const handleSearchButton = () => {
     const { pathname } = location;
     const { radioType, inputText } = searchBarData;
-    if (inputText.length > 1 && radioType === INGREDIENT) {
+    if (inputText.length > 1 && radioType === FIRST_LETTER_SEARCH_RADIO) {
       global.alert('Your search must have only 1 (one) character');
     } else {
       if (pathname === '/foods') foodSearch(radioType, inputText);
       if (pathname === '/drinks') drinkSearch(radioType, inputText);
     }
   };
-  const history = useHistory();
-  useEffect(() => {
-    if (searchBarData.searchResult) {
-      const constSearchResult = searchBarData.searchResult;
-      const drinksOrMeals = Object.keys(constSearchResult)[0];
-      console.log(drinksOrMeals);
-      if (drinksOrMeals === 'drinks' && constSearchResult.drinks.length === 1) {
-        history.push(`/drinks/${constSearchResult.drinks[0].idDrink}`);
-      }
-      if (drinksOrMeals === 'meals' && constSearchResult.meals.length === 1) {
-        history.push(`/foods/${constSearchResult.meals[0].idMeal}`);
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchBarData.searchResult]);
 
   const cardsNumber = 12;
 
