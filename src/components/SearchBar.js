@@ -8,6 +8,7 @@ function SearchBar() {
     inputText: '',
     radioType: '',
     searchResult: {},
+    cards: [],
   });
 
   const handleTextInput = ({ target }) => {
@@ -38,6 +39,7 @@ function SearchBar() {
     if (radioType === 'name-search-radio') {
       const nameSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${inputText}`);
       const data = await nameSearch.json();
+      console.log(data);
       setSearchBarData({
         ...searchBarData,
         searchResult: data,
@@ -55,6 +57,13 @@ function SearchBar() {
         });
       }
     }
+    if (searchBarData.searchResult.meals === null) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    }
+    setSearchBarData({
+      ...searchBarData,
+      cards: searchBarData.searchResult.meals,
+    });
   };
   const drinkSearch = async (radioType, inputText) => {
     if (radioType === 'ingredient-search-radio') {
@@ -88,6 +97,13 @@ function SearchBar() {
         });
       }
     }
+    if (searchBarData.searchResult.drinks === null) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    }
+    setSearchBarData({
+      ...searchBarData,
+      cards: searchBarData.searchResult.drinks,
+    });
   };
 
   const handleSearchButton = () => {
@@ -111,6 +127,8 @@ function SearchBar() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchBarData.searchResult]);
+
+  const maxCards = 12;
 
   return (
     <div>
@@ -165,6 +183,30 @@ function SearchBar() {
           </button>
         </div>
       )}
+      { Object.keys(searchBarData.searchResult)[0] === 'meals' && searchBarData.cards
+        .filter((_card, index) => (index < maxCards)
+          .map((card) => (
+            <div key={ index } data-testid={ `${index}-recipe-card` }>
+              <img
+                data-testid={ `${index}-card-img` }
+                src={ card.strMealThumb }
+                alt={ card.strMeal }
+              />
+              <p data-testid={ `${index}-card-name` }>{ card.strMeal }</p>
+            </div>
+          )))}
+      { Object.keys(searchBarData.searchResult)[0] === 'drinks' && searchBarData.cards
+        .filter((_card, index) => (index < maxCards)
+          .map((card) => (
+            <div key={ index } data-testid={ `${index}-recipe-card` }>
+              <img
+                data-testid={ `${index}-card-img` }
+                src={ card.strDrinkThumb }
+                alt={ card.strDrink }
+              />
+              <p data-testid={ `${index}-card-name` }>{ card.strDrink }</p>
+            </div>
+          )))}
     </div>
   );
 }
