@@ -6,6 +6,7 @@ function Provider({ children }) {
   const [data, setData] = useState({});
   const [allFoods, setAllFoods] = useState([]);
   const [allDrinks, setAllDrinks] = useState([]);
+  const [searchBar, setSearchBar] = useState(false);
 
   const INITIAL_STATE = {
     data,
@@ -14,6 +15,8 @@ function Provider({ children }) {
     setAllFoods,
     allDrinks,
     setAllDrinks,
+    searchBar,
+    setSearchBar,
   };
 
   return (

@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
+import Header from '../components/Header';
+import SearchBar from '../components/SearchBar';
 import Footer from '../components/Footer';
 import MyContext from '../context/context';
 import getFoodsAndDrinks from '../hooks/getFoodsAndDrinks';
@@ -57,7 +59,8 @@ function Drinks() {
 
   return (
     <div>
-      <h1>Drinks</h1>
+      <Header pageTitle="Drinks" search />
+      <SearchBar />
       <Filters categories={ categories } callback={ applyFilter } />
       <div className="recipes-list">
         { actualDrinks.map((drink, index) => (
