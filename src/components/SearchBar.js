@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useContext, useState, useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import MyContext from '../context/context';
 
 function SearchBar() {
@@ -58,7 +58,7 @@ function SearchBar() {
   };
   const drinkSearch = async (radioType, inputText) => {
     if (radioType === 'ingredient-search-radio') {
-      const ingredientEndPoint = 'www.thecocktaildb.com/api/json/v1/1/filter.php?i=';
+      const ingredientEndPoint = 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=';
       const ingredientSearch = await fetch(`${ingredientEndPoint}${inputText}`);
       const data = await ingredientSearch.json();
       setSearchBarData({
@@ -67,7 +67,7 @@ function SearchBar() {
       });
     }
     if (radioType === 'name-search-radio') {
-      const nameEndPoint = 'www.thecocktaildb.com/api/json/v1/1/search.php?i=';
+      const nameEndPoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
       const nameSearch = await fetch(`${nameEndPoint}${inputText}`);
       const data = await nameSearch.json();
       setSearchBarData({
@@ -79,7 +79,7 @@ function SearchBar() {
       if (inputText.length > 1) {
         global.alert('Your search must have only 1 (one) character');
       } else {
-        const firstLetterEndPoint = 'www.thecocktaildb.com/api/json/v1/1/search.php?f=';
+        const firstLetterEndPoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=';
         const firstLetterSearch = await fetch(`${firstLetterEndPoint}${inputText}`);
         const data = await firstLetterSearch.json();
         setSearchBarData({
@@ -90,7 +90,7 @@ function SearchBar() {
     }
   };
 
-  // const history = useHistory();
+  const history = useHistory();
   const handleSearchButton = () => {
     const { pathname } = location;
     const { radioType, inputText } = searchBarData;
@@ -105,6 +105,18 @@ function SearchBar() {
       // if (drinks.length === 0) history.push(`/drinks/${drinks[0].idDrink}`);
     }
   };
+
+  useEffect(() => {
+    const { searchResult } = searchBarData;
+    const drinksOrMeals = Object.keys(searchResult)[0];
+    console.log(drinksOrMeals);
+    if (drinksOrMeals === 'drinks' && searchResult.drinks.length === 0) {
+      history.push(`/drinks/${searchResult.drinks[0].idDrink}`);
+    }
+    if (drinksOrMeals === 'meals' && searchResult.meals.length === 0) {
+      history.push(`/foods/${searchResult.meals[0].idMeal}`);
+    }
+  }, [searchBarData.searchResult]);
 
   return (
     <div>
