@@ -90,31 +90,24 @@ function SearchBar() {
     }
   };
 
-  const history = useHistory();
   const handleSearchButton = () => {
     const { pathname } = location;
     const { radioType, inputText } = searchBarData;
-    if (pathname === '/foods') {
-      foodSearch(radioType, inputText);
-      // const { meals } = searchResult;
-      // if (meals.length === 0) history.push(`/foods/${meals[0].idMeal}`);
-    }
-    if (pathname === '/drinks') {
-      drinkSearch(radioType, inputText);
-      // const { drinks } = searchResult;
-      // if (drinks.length === 0) history.push(`/drinks/${drinks[0].idDrink}`);
-    }
+    if (pathname === '/foods') foodSearch(radioType, inputText);
+    if (pathname === '/drinks') drinkSearch(radioType, inputText);
   };
-
+  const history = useHistory();
   useEffect(() => {
-    const { searchResult } = searchBarData;
-    const drinksOrMeals = Object.keys(searchResult)[0];
-    console.log(drinksOrMeals);
-    if (drinksOrMeals === 'drinks' && searchResult.drinks.length === 0) {
-      history.push(`/drinks/${searchResult.drinks[0].idDrink}`);
-    }
-    if (drinksOrMeals === 'meals' && searchResult.meals.length === 0) {
-      history.push(`/foods/${searchResult.meals[0].idMeal}`);
+    if (searchBarData.searchResult) {
+      const { searchResult } = searchBarData;
+      const drinksOrMeals = Object.keys(searchResult)[0];
+      console.log(drinksOrMeals);
+      if (drinksOrMeals === 'drinks' && searchResult.drinks.length === 1) {
+        history.push(`/drinks/${searchResult.drinks[0].idDrink}`);
+      }
+      if (drinksOrMeals === 'meals' && searchResult.meals.length === 1) {
+        history.push(`/foods/${searchResult.meals[0].idMeal}`);
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchBarData.searchResult]);
