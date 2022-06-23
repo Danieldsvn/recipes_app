@@ -17,18 +17,10 @@ function Drinks() {
   const [actualFilter, setActualFilter] = useState('');
   const limitDrinks = 12;
 
-  const limitArray = (limit, array) => {
-    const result = [];
-    for (let i = 0; i < limit; i += 1) {
-      result.push(array[i]);
-    }
-    return result;
-  };
-
   useEffect(() => {
     const getDrinks = async () => {
       const { drinks } = await getFoodsAndDrinks();
-      setActualDrinks(limitArray(limitDrinks, drinks));
+      setActualDrinks(drinks.slice(0, limitDrinks));
       setAllDrinks(drinks);
     };
     getDrinks();
@@ -38,18 +30,18 @@ function Drinks() {
     const getDrinksCategories = async () => {
       const drinksCategories = await getCategories(false);
       const limitCategories = 5;
-      setCategories(limitArray(limitCategories, drinksCategories));
+      setCategories(drinksCategories.slice(0, limitCategories));
     };
     getDrinksCategories();
   }, [setCategories]);
 
   const applyFilter = async (filter) => {
     if (actualFilter === filter || filter === 'all') {
-      setActualDrinks(limitArray(limitDrinks, allDrinks));
+      setActualDrinks(allDrinks.slice(0, limitDrinks));
     } else {
       setActualFilter(filter);
       const newDrinks = await getFoodOrDrinkByCategory(false, filter);
-      setActualDrinks(newDrinks);
+      setActualDrinks(newDrinks.slice(0, limitDrinks));
     }
   };
 

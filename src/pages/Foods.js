@@ -17,18 +17,10 @@ function Foods() {
   const [actualFilter, setActualFilter] = useState('');
   const limitFoods = 12;
 
-  const limitArray = (limit, array) => {
-    const result = [];
-    for (let i = 0; i < limit; i += 1) {
-      result.push(array[i]);
-    }
-    return result;
-  };
-
   useEffect(() => {
     const getFoods = async () => {
       const { meals } = await getFoodsAndDrinks();
-      setActualFoods(limitArray(limitFoods, meals));
+      setActualFoods(meals.slice(0, limitFoods));
       setAllFoods(meals);
     };
     getFoods();
@@ -38,24 +30,27 @@ function Foods() {
     const getMealsCategories = async () => {
       const mealsCategories = await getCategories();
       const limitCategories = 5;
-      setCategories(limitArray(limitCategories, mealsCategories));
+      setCategories(mealsCategories.slice(0, limitCategories));
     };
     getMealsCategories();
   }, [setCategories]);
 
   const applyFilter = async (filter) => {
     if (actualFilter === filter || filter === 'all') {
-      setActualFoods(limitArray(limitFoods, allFoods));
+      setActualFoods(allFoods.slice(0, limitFoods));
     } else {
       setActualFilter(filter);
       const newFoods = await getFoodOrDrinkByCategory(true, filter);
-      setActualFoods(limitArray(limitFoods, newFoods));
+      console.log(newFoods);
+      setActualFoods(newFoods.slice(0, limitFoods));
     }
   };
 
   const redirectToDetails = (id) => {
     console.log(id);
   };
+
+  console.log('atualizou');
 
   return (
     <div>
