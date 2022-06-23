@@ -116,6 +116,7 @@ function SearchBar() {
     if (drinksOrMeals === 'meals' && searchResult.meals.length === 0) {
       history.push(`/foods/${searchResult.meals[0].idMeal}`);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchBarData.searchResult]);
 
   return (
