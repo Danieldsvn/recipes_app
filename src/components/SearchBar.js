@@ -8,8 +8,19 @@ function SearchBar() {
     inputText: '',
     radioType: '',
     searchResult: {},
-    cards: [],
+    cards: ['', '', ''],
+    cardType: '',
   });
+  const location = useLocation();
+
+  useEffect(() => {
+    const { pathname } = location;
+    setSearchBarData({
+      ...searchBarData,
+      cardType: pathname,
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleTextInput = ({ target }) => {
     setSearchBarData({
@@ -24,52 +35,38 @@ function SearchBar() {
       radioType: target.value,
     });
   };
-
-  const location = useLocation();
-
+  const INGREDIENT = 'ingredient-search-radio';
   const foodSearch = async (radioType, inputText) => {
-    if (radioType === 'ingredient-search-radio') {
+    let data = [];
+    if (radioType === INGREDIENT) {
       const ingredientSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${inputText}`);
-      const data = await ingredientSearch.json();
-      setSearchBarData({
-        ...searchBarData,
-        searchResult: data,
-      });
+      data = await ingredientSearch.json();
     }
     if (radioType === 'name-search-radio') {
       const nameSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${inputText}`);
-      const data = await nameSearch.json();
-      console.log(data);
-      setSearchBarData({
-        ...searchBarData,
-        searchResult: data,
-      });
+      data = await nameSearch.json();
     }
     if (radioType === 'first-letter-search-radio') {
-      if (inputText.length > 1) {
-        global.alert('Your search must have only 1 (one) character');
-      } else {
-        const firstLetterSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${inputText}`);
-        const data = await firstLetterSearch.json();
-        setSearchBarData({
-          ...searchBarData,
-          searchResult: data,
-        });
-      }
+      const firstLetterSearch = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${inputText}`);
+      data = await firstLetterSearch.json();
     }
-    if (searchBarData.searchResult.meals === null) {
+    if (data === []) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
-    setSearchBarData({
-      ...searchBarData,
-      cards: searchBarData.searchResult.meals,
-    });
+    if (data.meals.length > 1) {
+      setSearchBarData({
+        ...searchBarData,
+        cards: data.meals,
+      });
+    }
   };
   const drinkSearch = async (radioType, inputText) => {
-    if (radioType === 'ingredient-search-radio') {
+    let auxData = {};
+    if (radioType === INGREDIENT) {
       const ingredientEndPoint = 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=';
       const ingredientSearch = await fetch(`${ingredientEndPoint}${inputText}`);
       const data = await ingredientSearch.json();
+      auxData = data;
       setSearchBarData({
         ...searchBarData,
         searchResult: data,
@@ -79,6 +76,7 @@ function SearchBar() {
       const nameEndPoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
       const nameSearch = await fetch(`${nameEndPoint}${inputText}`);
       const data = await nameSearch.json();
+      auxData = data;
       setSearchBarData({
         ...searchBarData,
         searchResult: data,
@@ -91,44 +89,52 @@ function SearchBar() {
         const firstLetterEndPoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=';
         const firstLetterSearch = await fetch(`${firstLetterEndPoint}${inputText}`);
         const data = await firstLetterSearch.json();
+        auxData = data;
         setSearchBarData({
           ...searchBarData,
           searchResult: data,
         });
       }
     }
-    if (searchBarData.searchResult.drinks === null) {
+
+    if (auxData.drinks === null) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
-    setSearchBarData({
-      ...searchBarData,
-      cards: searchBarData.searchResult.drinks,
-    });
+    if (auxData.drinks.length > 1) {
+      setSearchBarData({
+        ...searchBarData,
+        cards: auxData.drinks,
+      });
+    }
   };
 
   const handleSearchButton = () => {
     const { pathname } = location;
     const { radioType, inputText } = searchBarData;
-    if (pathname === '/foods') foodSearch(radioType, inputText);
-    if (pathname === '/drinks') drinkSearch(radioType, inputText);
+    if (inputText.length > 1 && radioType === INGREDIENT) {
+      global.alert('Your search must have only 1 (one) character');
+    } else {
+      if (pathname === '/foods') foodSearch(radioType, inputText);
+      if (pathname === '/drinks') drinkSearch(radioType, inputText);
+    }
   };
   const history = useHistory();
   useEffect(() => {
     if (searchBarData.searchResult) {
-      const { searchResult } = searchBarData;
-      const drinksOrMeals = Object.keys(searchResult)[0];
+      const constSearchResult = searchBarData.searchResult;
+      const drinksOrMeals = Object.keys(constSearchResult)[0];
       console.log(drinksOrMeals);
-      if (drinksOrMeals === 'drinks' && searchResult.drinks.length === 1) {
-        history.push(`/drinks/${searchResult.drinks[0].idDrink}`);
+      if (drinksOrMeals === 'drinks' && constSearchResult.drinks.length === 1) {
+        history.push(`/drinks/${constSearchResult.drinks[0].idDrink}`);
       }
-      if (drinksOrMeals === 'meals' && searchResult.meals.length === 1) {
-        history.push(`/foods/${searchResult.meals[0].idMeal}`);
+      if (drinksOrMeals === 'meals' && constSearchResult.meals.length === 1) {
+        history.push(`/foods/${constSearchResult.meals[0].idMeal}`);
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchBarData.searchResult]);
 
-  const maxCards = 12;
+  const cardsNumber = 12;
 
   return (
     <div>
@@ -183,30 +189,30 @@ function SearchBar() {
           </button>
         </div>
       )}
-      { Object.keys(searchBarData.searchResult)[0] === 'meals' && searchBarData.cards
-        .filter((_card, index) => (index < maxCards)
-          .map((card) => (
-            <div key={ index } data-testid={ `${index}-recipe-card` }>
-              <img
-                data-testid={ `${index}-card-img` }
-                src={ card.strMealThumb }
-                alt={ card.strMeal }
-              />
-              <p data-testid={ `${index}-card-name` }>{ card.strMeal }</p>
-            </div>
-          )))}
-      { Object.keys(searchBarData.searchResult)[0] === 'drinks' && searchBarData.cards
-        .filter((_card, index) => (index < maxCards)
-          .map((card) => (
-            <div key={ index } data-testid={ `${index}-recipe-card` }>
-              <img
-                data-testid={ `${index}-card-img` }
-                src={ card.strDrinkThumb }
-                alt={ card.strDrink }
-              />
-              <p data-testid={ `${index}-card-name` }>{ card.strDrink }</p>
-            </div>
-          )))}
+      { searchBarData.cardType === '/foods' && searchBarData.cards
+        .filter((_card, index) => (index < cardsNumber))
+        .map((card, index) => (
+          <div key={ index } data-testid={ `${index}-recipe-card` }>
+            <img
+              data-testid={ `${index}-card-img` }
+              src={ card.strMealThumb }
+              alt={ card.strMeal }
+            />
+            <p data-testid={ `${index}-card-name` }>{ card.strMeal }</p>
+          </div>
+        ))}
+      { searchBarData.cardType === '/drinks' && searchBarData.cards
+        .filter((_card, index) => (index < cardsNumber))
+        .map((card, index) => (
+          <div key={ index } data-testid={ `${index}-recipe-card` }>
+            <img
+              data-testid={ `${index}-card-img` }
+              src={ card.strDrinkThumb }
+              alt={ card.strDrink }
+            />
+            <p data-testid={ `${index}-card-name` }>{ card.strDrink }</p>
+          </div>
+        ))}
     </div>
   );
 }
