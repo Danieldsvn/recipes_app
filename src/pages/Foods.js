@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import Footer from '../components/Footer';
@@ -15,6 +16,7 @@ function Foods() {
   const [categories, setCategories] = useState([]);
   const [actualFoods, setActualFoods] = useState([]);
   const [actualFilter, setActualFilter] = useState('');
+  const history = useHistory();
   const limitFoods = 12;
 
   useEffect(() => {
@@ -41,16 +43,13 @@ function Foods() {
     } else {
       setActualFilter(filter);
       const newFoods = await getFoodOrDrinkByCategory(true, filter);
-      console.log(newFoods);
       setActualFoods(newFoods.slice(0, limitFoods));
     }
   };
 
   const redirectToDetails = (id) => {
-    console.log(id);
+    history.push(`/foods/${id}`);
   };
-
-  console.log('atualizou');
 
   return (
     <div>
@@ -64,9 +63,10 @@ function Foods() {
               <Card
                 key={ food.strMeal }
                 id={ index }
+                identity={ food.idMeal }
                 name={ food.strMeal }
                 image={ food.strMealThumb }
-                onClick={ () => redirectToDetails(food.idMeal) }
+                redirectToDetails={ redirectToDetails }
               />
             ))}
           </div>

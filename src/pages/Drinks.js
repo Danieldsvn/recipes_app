@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import Footer from '../components/Footer';
@@ -15,6 +16,7 @@ function Drinks() {
   const [categories, setCategories] = useState([]);
   const [actualDrinks, setActualDrinks] = useState([]);
   const [actualFilter, setActualFilter] = useState('');
+  const history = useHistory();
   const limitDrinks = 12;
 
   useEffect(() => {
@@ -46,7 +48,7 @@ function Drinks() {
   };
 
   const redirectToDetails = (id) => {
-    console.log(id);
+    history.push(`/drinks/${id}`);
   };
 
   return (
@@ -61,7 +63,8 @@ function Drinks() {
             id={ index }
             name={ drink.strDrink }
             image={ drink.strDrinkThumb }
-            onClick={ () => redirectToDetails(drink.idDrink) }
+            identity={ drink.idDrink }
+            redirectToDetails={ redirectToDetails }
           />
         ))}
       </div>
