@@ -3,7 +3,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import MyContext from '../context/context';
 
 function SearchBar() {
-  const { searchBar } = useContext(MyContext);
+  const { searchBar, setSingleSearchResult } = useContext(MyContext);
   const [searchBarData, setSearchBarData] = useState({
     inputText: '',
     radioType: '',
@@ -61,6 +61,7 @@ function SearchBar() {
         });
       }
       if (data.meals.length === 1) {
+        setSingleSearchResult(data.meals[0]); // Provavelmente será útil na página de detalhes
         history.push(`/foods/${data.meals[0].idMeal}`);
       }
     }
@@ -93,6 +94,7 @@ function SearchBar() {
         });
       }
       if (data.drinks.length === 1) {
+        setSingleSearchResult(data.drinks[0]); // Provavelmente será útil na página de detalhes
         history.push(`/drinks/${data.drinks[0].idDrink}`);
       }
     }
