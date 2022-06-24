@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import DetailsHeader from '../components/DetailsHeader';
 import RecommendedCard from '../components/RecommendedCard';
 
 function DrinkDetails() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const locationArray = location.pathname.split('s/', 2);
+    const drinkId = locationArray[1];
+    console.log(drinkId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div>
       <DetailsHeader />
@@ -10,7 +20,7 @@ function DrinkDetails() {
         <h2>Ingredients</h2>
         <ul className="ingredients-list">
           <li
-            data-testid={ `${index}-ingredient-name-and-measure` }
+            data-testid={ `${location.pathname}-ingredient-name-and-measure` }
           >
             ingrediente
           </li>
