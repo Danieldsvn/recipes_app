@@ -1,21 +1,38 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import DetailsHeader from '../components/DetailsHeader';
 import RecommendedCard from '../components/RecommendedCard';
+import getFoodAndDrinkById from '../hooks/getFoodAndDrinkById';
 
 function DrinkDetails() {
   const location = useLocation();
 
+  const [drinkAttributes, setDrinkAttributes] = useState({
+    drinks: [],
+  });
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const locationArray = location.pathname.split('s/', 2);
     const drinkId = locationArray[1];
-    console.log(drinkId);
+    const fetchDrinkById = async () => {
+      const { drinks } = await getFoodAndDrinkById(drinkId);
+      console.log(drinks);
+      setDrinkAttributes(drinks);
+      setLoading(false);
+    };
+    fetchDrinkById();
+    console.log(drinkAttributes);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div>
-      <DetailsHeader />
+      { !loading && <DetailsHeader
+        title={ drinkAttributes[0].strDrink }
+        photo={ drinkAttributes[0].strDrinkThumb }
+        category={ drinkAttributes[0].strCategory }
+      /> }
       <section className="ingredients-section">
         <h2>Ingredients</h2>
         <ul className="ingredients-list">
@@ -32,7 +49,7 @@ function DrinkDetails() {
           <p data-testid="instructions">drink...</p>
         </div>
       </section>
-      <section id="Recommended">
+      <section className="Recommended">
         <h2>Recomended foods...</h2>
         <RecommendedCard />
         <RecommendedCard />

@@ -1,26 +1,38 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import RecommendedCard from '../components/RecommendedCard';
 import DetailsHeader from '../components/DetailsHeader';
+import getFoodAndDrinkById from '../hooks/getFoodAndDrinkById';
 
 function FoodDetails() {
   const location = useLocation();
+  const [foodAttributes, setFoodAttributes] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const locationArray = location.pathname.split('s/', 2);
     const foodId = locationArray[1];
-    console.log(foodId);
+    const fetchFoodById = async () => {
+      const { meals } = getFoodAndDrinkById(foodId);
+      setFoodAttributes(meals);
+    };
+    fetchFoodById();
+    setLoading(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div>
-      <DetailsHeader />
+      { !loading && <DetailsHeader
+        title={ foodAttributes[0].strMeal }
+        photo={ foodAttributes[0].strMealThumb }
+        category={ foodAttributes[0].strCategory }
+      />}
       <section className="ingredients-section">
         <h2>Ingredients</h2>
         <ul className="ingredients-list">
           <li
-            data-testid={ `index-ingredient-name-and-measure` }
+            data-testid="index-ingredient-name-and-measure"
           >
             ingrediente
           </li>
