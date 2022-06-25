@@ -17,7 +17,6 @@ function DrinkDetails() {
     const drinkId = locationArray[1];
     const fetchDrinkById = async () => {
       const { drinks } = await getFoodAndDrinkById(drinkId);
-      console.log(drinks);
       setDrinkAttributes(drinks);
       setLoading(false);
     };

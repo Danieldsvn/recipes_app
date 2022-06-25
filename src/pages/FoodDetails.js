@@ -6,18 +6,20 @@ import getFoodAndDrinkById from '../hooks/getFoodAndDrinkById';
 
 function FoodDetails() {
   const location = useLocation();
-  const [foodAttributes, setFoodAttributes] = useState();
+  const [foodAttributes, setFoodAttributes] = useState({
+    meals: [],
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const locationArray = location.pathname.split('s/', 2);
     const foodId = locationArray[1];
     const fetchFoodById = async () => {
-      const { meals } = getFoodAndDrinkById(foodId);
+      const { meals } = await getFoodAndDrinkById(foodId);
       setFoodAttributes(meals);
+      setLoading(false);
     };
     fetchFoodById();
-    setLoading(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
