@@ -41,23 +41,23 @@ function DrinkDetails() {
         photo={ drinkAttributes[0].strDrinkThumb }
         category={ drinkAttributes[0].strCategory }
       /> }
-      <section className="ingredients-section">
-        <h2>Ingredients</h2>
-        <ul className="ingredients-list">
-          <li
-            data-testid={ `${drinkAttributes[0].strIngredient1}
-            -ingredient-name-and-measure` }
-          >
-            {`${drinkAttributes[0].strIngredient1}: ${drinkAttributes[0].strMeasure1} `}
-          </li>
-        </ul>
-      </section>
-      <section className="instructions">
-        <h2>Instructions</h2>
-        <div>
+      { !loading && <section>
+        <div className="ingredients-section">
+          <h2>Ingredients</h2>
+          <ul className="ingredients-list">
+            <li
+              data-testid={ `${drinkAttributes[0].strIngredient1}
+              -ingredient-name-and-measure` }
+            >
+              {`${drinkAttributes[0].strIngredient1}: ${drinkAttributes[0].strMeasure1} `}
+            </li>
+          </ul>
+        </div>
+        <div className="instructions">
+          <h2>Instructions</h2>
           <p data-testid="instructions">{drinkAttributes[0].strInstructions}</p>
         </div>
-      </section>
+      </section>}
       <section className="recommended-foods">
         { !loading && recommendedFoods
           .filter((_food, index) => index < cardsNumber)

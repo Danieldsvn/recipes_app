@@ -50,26 +50,28 @@ function FoodDetails() {
           </li>
         </ul>
       </section>
-      <section className="instructions">
-        <h2>Instructions</h2>
-        <div>
-          <p data-testid="instructions">{foodAttributes[0].strInstructions}</p>
+      { !loading && <section>
+        <div className="instructions">
+          <h2>Instructions</h2>
+          <div>
+            <p data-testid="instructions">{foodAttributes[0].strInstructions}</p>
+          </div>
         </div>
-      </section>
-      <section className="Video">
-        <h2>Video</h2>
-        <iframe
-          data-testid="video"
-          width="360"
-          height="360"
-          src="https://www.youtube.com/embed/gfhfsBPt46s"
-          title="How to Make Homemade Italian Lasagna Bolognese"
-          frameBorder="0"
-          allow="accelerometer;
-           clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      </section>
+        <div className="Video">
+          <h2>Video</h2>
+          <iframe
+            data-testid="video"
+            width="360"
+            height="360"
+            src={ foodAttributes[0].strYoutube }
+            title="How to Make Homemade Italian Lasagna Bolognese"
+            frameBorder="0"
+            allow="accelerometer;
+            clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      </section> }
       <section className="recommended-drinks">
         { !loading && recommendedDrinks
           .filter((_drink, index) => index < cardsNumber)
