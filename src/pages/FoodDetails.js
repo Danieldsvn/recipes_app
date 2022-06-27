@@ -25,32 +25,29 @@ function FoodDetails() {
       setRecommendedDrinks(drinks);
       setLoading(false);
       console.log(meals);
+      console.log(meals[0].strIngredient1);
     };
     getFoodDetailsDrinkRecommendation();
+    // console.log(foodAttributes[0].strIngredient1);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const cardsNumber = 6;
 
-  return (
-    <div>
-      { !loading && <DetailsHeader
-        title={ foodAttributes[0].strMeal }
-        photo={ foodAttributes[0].strMealThumb }
-        category={ foodAttributes[0].strCategory }
-      />}
-      <section className="ingredients-section">
-        <h2>Ingredients</h2>
-        <ul className="ingredients-list">
-          <li
-            data-testid={ `${foodAttributes[0].strIngredient1}
-          -ingredient-name-and-measure` }
-          >
-            {`${foodAttributes[0].strIngredient1}: ${foodAttributes[0].strMeasure1} `}
-          </li>
-        </ul>
-      </section>
-      { !loading && <section>
+  const instructionsIngredientsVideoHtml = () => (
+    (
+      <section>
+        <div className="ingredients-section">
+          <h2>Ingredients</h2>
+          <ul className="ingredients-list">
+            <li
+              data-testid={ `${foodAttributes[0].strIngredient1}
+            -ingredient-name-and-measure` }
+            >
+              {`${foodAttributes[0].strIngredient1}: ${foodAttributes[0].strMeasure1} `}
+            </li>
+          </ul>
+        </div>
         <div className="instructions">
           <h2>Instructions</h2>
           <div>
@@ -65,13 +62,20 @@ function FoodDetails() {
             height="360"
             src={ foodAttributes[0].strYoutube }
             title="How to Make Homemade Italian Lasagna Bolognese"
-            frameBorder="0"
-            allow="accelerometer;
-            clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
         </div>
-      </section> }
+      </section>)
+  );
+
+  return (
+    <div>
+      { !loading && <DetailsHeader
+        title={ foodAttributes[0].strMeal }
+        photo={ foodAttributes[0].strMealThumb }
+        category={ foodAttributes[0].strCategory }
+      />}
+      { !loading && instructionsIngredientsVideoHtml() }
       <section className="recommended-drinks">
         { !loading && recommendedDrinks
           .filter((_drink, index) => index < cardsNumber)
