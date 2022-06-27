@@ -15,6 +15,22 @@ function FoodDetails() {
   });
   const [loading, setLoading] = useState(true);
 
+  // const getIngredientsAndMeasures = (meal) => {
+  //   const mealsEntries = Object.entries(meal[0]);
+  //   const strIngredientsEntries = mealsEntries
+  //     .filter((entry) => entry[0]
+  //       .includes('strIngredient') && entry[1] !== '');
+  //   const strMeasuresEntries = mealsEntries
+  //     .filter((entry) => entry[0]
+  //       .includes('strMeasures') && entry[1] !== ' ');
+  //   const ingredientsAndMeasures = [];
+  //   for (let index = 0; index < mealsEntries.length;) {
+  //     ingredientsAndMeasures
+  //       .push(`${strIngredientsEntries[index]}: ${strMeasuresEntries[index]}`);
+  //   }
+  //   console.log(ingredientsAndMeasures);
+  // };
+
   useEffect(() => {
     const locationArray = location.pathname.split('s/', 2);
     const foodId = locationArray[1];
@@ -26,6 +42,24 @@ function FoodDetails() {
       setLoading(false);
       console.log(meals);
       console.log(meals[0].strIngredient1);
+      // function getIngredients/Measures
+      const mealsEntries = Object.entries(meals[0]);
+      const strIngredientsEntries = mealsEntries
+        .filter((entry) => entry[0]
+          .includes('strIngredient') && entry[1] !== '');
+      console.log(strIngredientsEntries);
+      const strMeasuresEntries = mealsEntries
+        .filter((entry) => entry[0]
+          .includes('strMeasure') && entry[1] !== ' ');
+      console.log(strMeasuresEntries);
+      const ingredientsList = strIngredientsEntries.map((ingredient, index) => (
+        `${ingredient}: ${strMeasuresEntries[index][1]}`);
+      let ingredientsAndMeasures = [];
+      for (let index = 0; index < strIngredientsEntries.length; index += 1) {
+        ingredientsAndMeasures
+          .push(`${strIngredientsEntries[index]}: ${strMeasuresEntries[index]}`);
+      }
+      console.log(ingredients);
     };
     getFoodDetailsDrinkRecommendation();
     // console.log(foodAttributes[0].strIngredient1);
