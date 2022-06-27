@@ -43,17 +43,17 @@ function FoodDetails() {
         <h2>Ingredients</h2>
         <ul className="ingredients-list">
           <li
-            data-testid={ `${drinkAttributes[0].strIngredient1}
+            data-testid={ `${foodAttributes[0].strIngredient1}
           -ingredient-name-and-measure` }
           >
-            {`${drinkAttributes[0].strIngredient1}: ${drinkAttributes[0].strMeasure1} `}
+            {`${foodAttributes[0].strIngredient1}: ${foodAttributes[0].strMeasure1} `}
           </li>
         </ul>
       </section>
       <section className="instructions">
         <h2>Instructions</h2>
         <div>
-          <p data-testid="instructions">{drinkAttributes[0].strInstructions}</p>
+          <p data-testid="instructions">{foodAttributes[0].strInstructions}</p>
         </div>
       </section>
       <section className="Video">
