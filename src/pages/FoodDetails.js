@@ -13,23 +13,21 @@ function FoodDetails() {
   const [recommendedDrinks, setRecommendedDrinks] = useState({
     drinks: [],
   });
+  const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // const getIngredientsAndMeasures = (meal) => {
-  //   const mealsEntries = Object.entries(meal[0]);
-  //   const strIngredientsEntries = mealsEntries
-  //     .filter((entry) => entry[0]
-  //       .includes('strIngredient') && entry[1] !== '');
-  //   const strMeasuresEntries = mealsEntries
-  //     .filter((entry) => entry[0]
-  //       .includes('strMeasures') && entry[1] !== ' ');
-  //   const ingredientsAndMeasures = [];
-  //   for (let index = 0; index < mealsEntries.length;) {
-  //     ingredientsAndMeasures
-  //       .push(`${strIngredientsEntries[index]}: ${strMeasuresEntries[index]}`);
-  //   }
-  //   console.log(ingredientsAndMeasures);
-  // };
+  const getIngredientsAndMeasures = (meal) => {
+    const mealsEntries = Object.entries(meal[0]);
+    const strIngredientsEntries = mealsEntries
+      .filter((entry) => entry[0]
+        .includes('strIngredient') && entry[1] !== '');
+    const strMeasuresEntries = mealsEntries
+      .filter((entry) => entry[0]
+        .includes('strMeasure') && entry[1] !== ' ');
+    const ingredientsList = strIngredientsEntries.map((ingredient, index) => (
+      `${ingredient[1]}: ${strMeasuresEntries[index][1]}`));
+    return ingredientsList;
+  };
 
   useEffect(() => {
     const locationArray = location.pathname.split('s/', 2);
@@ -38,28 +36,9 @@ function FoodDetails() {
       const { meals } = await getFoodAndDrinkById(foodId);
       const { drinks } = await getFoodsAndDrinks();
       setFoodAttributes(meals);
+      setIngredients(getIngredientsAndMeasures(meals));
       setRecommendedDrinks(drinks);
       setLoading(false);
-      console.log(meals);
-      console.log(meals[0].strIngredient1);
-      // function getIngredients/Measures
-      const mealsEntries = Object.entries(meals[0]);
-      const strIngredientsEntries = mealsEntries
-        .filter((entry) => entry[0]
-          .includes('strIngredient') && entry[1] !== '');
-      console.log(strIngredientsEntries);
-      const strMeasuresEntries = mealsEntries
-        .filter((entry) => entry[0]
-          .includes('strMeasure') && entry[1] !== ' ');
-      console.log(strMeasuresEntries);
-      const ingredientsList = strIngredientsEntries.map((ingredient, index) => (
-        `${ingredient}: ${strMeasuresEntries[index][1]}`);
-      let ingredientsAndMeasures = [];
-      for (let index = 0; index < strIngredientsEntries.length; index += 1) {
-        ingredientsAndMeasures
-          .push(`${strIngredientsEntries[index]}: ${strMeasuresEntries[index]}`);
-      }
-      console.log(ingredients);
     };
     getFoodDetailsDrinkRecommendation();
     // console.log(foodAttributes[0].strIngredient1);
@@ -74,12 +53,14 @@ function FoodDetails() {
         <div className="ingredients-section">
           <h2>Ingredients</h2>
           <ul className="ingredients-list">
-            <li
-              data-testid={ `${foodAttributes[0].strIngredient1}
-            -ingredient-name-and-measure` }
-            >
-              {`${foodAttributes[0].strIngredient1}: ${foodAttributes[0].strMeasure1} `}
-            </li>
+            { ingredients.map((ingredient, index) => (
+              <li
+                key={ index }
+                data-testid={ `${index}-ingredient-name-and-measure` }
+              >
+                { ingredient }
+              </li>
+            ))}
           </ul>
         </div>
         <div className="instructions">
