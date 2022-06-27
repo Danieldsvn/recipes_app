@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import DetailsHeader from '../components/DetailsHeader';
 import RecommendedCard from '../components/RecommendedCard';
 import getFoodAndDrinkById from '../hooks/getFoodAndDrinkById';
+import getFoodsAndDrinks from '../hooks/getFoodsAndDrinks';
 
 function DrinkDetails() {
   const location = useLocation();
@@ -10,20 +11,28 @@ function DrinkDetails() {
   const [drinkAttributes, setDrinkAttributes] = useState({
     drinks: [],
   });
+  const [recommendedFoods, setRecommendedFoods] = useState({
+    drinks: [],
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const locationArray = location.pathname.split('s/', 2);
     const drinkId = locationArray[1];
-    const fetchDrinkById = async () => {
+    const getDrinkDetailsFoodRecomedation = async () => {
       const { drinks } = await getFoodAndDrinkById(drinkId);
+      const { meals } = await getFoodsAndDrinks();
       setDrinkAttributes(drinks);
+      setRecommendedFoods(meals);
+      console.log(meals);
       setLoading(false);
     };
-    fetchDrinkById();
+    getDrinkDetailsFoodRecomedation();
     console.log(drinkAttributes);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const cardsNumber = 6;
 
   return (
     <div>
@@ -36,23 +45,31 @@ function DrinkDetails() {
         <h2>Ingredients</h2>
         <ul className="ingredients-list">
           <li
-            data-testid={ `${location.pathname}-ingredient-name-and-measure` }
+            data-testid={ `${drinkAttributes[0].strIngredient1}
+            -ingredient-name-and-measure` }
           >
-            ingrediente
+            {`${drinkAttributes[0].strIngredient1}: ${drinkAttributes[0].strMeasure1} `}
           </li>
         </ul>
       </section>
       <section className="instructions">
         <h2>Instructions</h2>
         <div>
-          <p data-testid="instructions">drink...</p>
+          <p data-testid="instructions">{drinkAttributes[0].strInstructions}</p>
         </div>
       </section>
-      <section className="Recommended">
-        <h2>Recomended foods...</h2>
-        <RecommendedCard />
-        <RecommendedCard />
-        <RecommendedCard />
+      <section className="recommended-foods">
+        { !loading && recommendedFoods
+          .filter((_food, index) => index < cardsNumber)
+          .map((food, index) => (
+            <RecommendedCard
+              key={ index }
+              index={ index }
+              photo={ food.strMealThumb }
+              title={ food.strMeal }
+              category={ food.strCategory }
+            />
+          ))}
       </section>
       <footer>
         <button type="button" data-testid="start-recipe-btn">Start Recipe</button>
