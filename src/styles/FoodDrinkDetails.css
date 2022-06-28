@@ -1,7 +1,7 @@
 .details-header {
+  align-items: center;
   display: inline-block;
   margin: 5px;
-  align-items: center;
 }
 
 .details-recipe-image {
@@ -13,8 +13,8 @@
 }
 
 .instructions {
-  max-width: min-content;
   align-self: center;
+  max-width: min-content;
 }
 
 .recommended-list {
