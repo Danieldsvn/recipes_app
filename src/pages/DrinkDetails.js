@@ -22,7 +22,7 @@ function DrinkDetails() {
     const locationArray = location.pathname.split('s/', 2);
     const drinkId = locationArray[1];
     const getDrinkDetailsFoodRecomedation = async () => {
-      const drinks = await getDrinkById(drinkId);
+      const { drinks } = await getDrinkById(drinkId);
       const { meals } = await getFoodsAndDrinks();
       setDrinkAttributes(drinks);
       setIngredients(getIngredientsAndMeasures(drinks));

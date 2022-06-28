@@ -22,11 +22,10 @@ function FoodDetails() {
     const foodId = locationArray[1];
     console.log(foodId);
     const getFoodDetailsDrinkRecommendation = async () => {
-      const data = await getFoodById(foodId);
-      console.log(data);
+      const { meals } = await getFoodById(foodId);
       const { drinks } = await getFoodsAndDrinks();
-      setFoodAttributes(data);
-      setIngredients(getIngredientsAndMeasures(data));
+      setFoodAttributes(meals);
+      setIngredients(getIngredientsAndMeasures(meals));
       setRecommendedDrinks(drinks);
       setLoading(false);
     };
