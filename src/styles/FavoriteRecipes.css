@@ -1,0 +1,46 @@
+.favorite-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.favorite-card {
+  background-color: aliceblue;
+  border-radius: 6px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  height: 143px;
+  width: 333px;
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.favorite-card img {
+  width: 165px;
+  height: 143px;
+  border-radius: 4px 0px 0px 4px;
+}
+
+.favorite-card button img {
+  height: 21px;
+  width: 21px;
+}
+
+.favorite-card span {
+  width: 52px;
+  height: 25px;
+  
+}
+
+#copyText {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: aliceblue;
+  background-color: rgba(0, 0, 0, 0.5);
+}
