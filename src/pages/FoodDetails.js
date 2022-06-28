@@ -4,6 +4,7 @@ import RecommendedCard from '../components/RecommendedCard';
 import DetailsHeader from '../components/DetailsHeader';
 import getFoodAndDrinkById from '../hooks/getFoodAndDrinkById';
 import getFoodsAndDrinks from '../hooks/getFoodsAndDrinks';
+import getIngredientsAndMeasures from '../hooks/getIngredientsAndMesures';
 
 function FoodDetails() {
   const location = useLocation();
@@ -16,19 +17,6 @@ function FoodDetails() {
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const getIngredientsAndMeasures = (meal) => {
-    const mealsEntries = Object.entries(meal[0]);
-    const strIngredientsEntries = mealsEntries
-      .filter((entry) => entry[0]
-        .includes('strIngredient') && entry[1] !== '');
-    const strMeasuresEntries = mealsEntries
-      .filter((entry) => entry[0]
-        .includes('strMeasure') && entry[1] !== ' ');
-    const ingredientsList = strIngredientsEntries.map((ingredient, index) => (
-      `${ingredient[1]}: ${strMeasuresEntries[index][1]}`));
-    return ingredientsList;
-  };
-
   useEffect(() => {
     const locationArray = location.pathname.split('s/', 2);
     const foodId = locationArray[1];
@@ -38,13 +26,17 @@ function FoodDetails() {
       setFoodAttributes(meals);
       setIngredients(getIngredientsAndMeasures(meals));
       setRecommendedDrinks(drinks);
-      setLoading(false);
+      if (foodAttributes !== undefined) setLoading(false);
     };
     getFoodDetailsDrinkRecommendation();
+    console.log(foodAttributes[0]);
     // console.log(foodAttributes[0].strIngredient1);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    console.log(foodAttributes[0]);
+  }, [foodAttributes]);
   const cardsNumber = 6;
 
   const instructionsIngredientsVideoHtml = () => (
@@ -82,7 +74,14 @@ function FoodDetails() {
         </div>
       </section>)
   );
-
+  const startRecipeButton = (
+    <button
+      type="button"
+      data-testid="start-recipe-btn"
+    >
+      Start Recipe
+    </button>
+  );
   return (
     <div>
       { !loading && <DetailsHeader
@@ -105,7 +104,7 @@ function FoodDetails() {
           ))}
       </section>
       <footer>
-        <button type="button" data-testid="start-recipe-btn">Start Recipe</button>
+        { !loading && startRecipeButton }
       </footer>
     </div>
   );

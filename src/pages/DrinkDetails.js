@@ -4,6 +4,7 @@ import DetailsHeader from '../components/DetailsHeader';
 import RecommendedCard from '../components/RecommendedCard';
 import getFoodAndDrinkById from '../hooks/getFoodAndDrinkById';
 import getFoodsAndDrinks from '../hooks/getFoodsAndDrinks';
+import getIngredientsAndMeasures from '../hooks/getIngredientsAndMesures';
 
 function DrinkDetails() {
   const location = useLocation();
@@ -14,6 +15,7 @@ function DrinkDetails() {
   const [recommendedFoods, setRecommendedFoods] = useState({
     drinks: [],
   });
+  const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,12 +25,11 @@ function DrinkDetails() {
       const { drinks } = await getFoodAndDrinkById(drinkId);
       const { meals } = await getFoodsAndDrinks();
       setDrinkAttributes(drinks);
+      setIngredients(getIngredientsAndMeasures(drinks));
       setRecommendedFoods(meals);
-      console.log(meals);
       setLoading(false);
     };
     getDrinkDetailsFoodRecomedation();
-    console.log(drinkAttributes);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -36,17 +37,19 @@ function DrinkDetails() {
 
   const instructionsIngredientsHtml = () => (
     <section>
-      <sections className="ingredients-section">
+      <div className="ingredients-section">
         <h2>Ingredients</h2>
         <ul className="ingredients-list">
-          <li
-            data-testid={ `${drinkAttributes[0].strIngredient1}
-            -ingredient-name-and-measure` }
-          >
-            {`${drinkAttributes[0].strIngredient1}: ${drinkAttributes[0].strMeasure1} `}
-          </li>
+          { ingredients.map((ingredient, index) => (
+            <li
+              key={ index }
+              data-testid={ `${index}-ingredient-name-and-measure` }
+            >
+              { ingredient }
+            </li>
+          ))}
         </ul>
-      </sections>
+      </div>
       <div
         className="instructions"
       >
