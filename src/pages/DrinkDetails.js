@@ -14,7 +14,7 @@ function DrinkDetails() {
     drinks: [],
   });
   const [recommendedFoods, setRecommendedFoods] = useState({
-    drinks: [],
+    meals: [],
   });
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +25,7 @@ function DrinkDetails() {
     const getDrinkDetailsFoodRecomedation = async () => {
       const { drinks } = await getDrinkById(drinkId);
       const { meals } = await getFoodsAndDrinks();
+      console.log(drinks);
       setDrinkAttributes(drinks);
       setIngredients(getIngredientsAndMeasures(drinks));
       setRecommendedFoods(meals);
@@ -65,7 +66,7 @@ function DrinkDetails() {
       { !loading && <DetailsHeader
         title={ drinkAttributes[0].strDrink }
         photo={ drinkAttributes[0].strDrinkThumb }
-        category={ drinkAttributes[0].strCategory }
+        category={ drinkAttributes[0].strAlcoholic }
       /> }
       { !loading && instructionsIngredientsHtml()}
       <section className="recommended-list">

@@ -1,3 +1,22 @@
+.details-header {
+  display: inline-block;
+  margin: 5px;
+  align-items: center;
+}
+
+.details-recipe-image {
+  max-width: 100%;
+}
+
+.share-favorite-buttons {
+  display: inline;
+}
+
+.instructions {
+  max-width: min-content;
+  align-self: center;
+}
+
 .recommended-list {
   display: flex;
   flex-wrap: wrap;
@@ -13,8 +32,8 @@
 }
 
 .recommended-card img {
-  height: 80%;
-  width: 100%;
+  height: 50%;
+  width: 70%;
 }
 
 .start-recipe {
