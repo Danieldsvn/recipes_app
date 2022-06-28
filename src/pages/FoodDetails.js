@@ -5,6 +5,7 @@ import DetailsHeader from '../components/DetailsHeader';
 import { getFoodById } from '../hooks/getFoodAndDrinkById';
 import getFoodsAndDrinks from '../hooks/getFoodsAndDrinks';
 import getIngredientsAndMeasures from '../hooks/getIngredientsAndMesures';
+import '../styles/FoodDrinkDetails.css';
 
 function FoodDetails() {
   const location = useLocation();
@@ -91,7 +92,7 @@ function FoodDetails() {
         category={ foodAttributes[0].strCategory }
       />}
       { !loading && instructionsIngredientsVideoHtml() }
-      <section className="recommended-drinks">
+      <section className="recommended-list">
         { !loading && recommendedDrinks
           .filter((_drink, index) => index < cardsNumber)
           .map((drink, index) => (

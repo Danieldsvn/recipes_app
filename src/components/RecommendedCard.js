@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import '../styles/FoodDrinkDetails.css';
 
 function RecommendedCard({ key, index, photo, title, category }) {
   return (
     <div
       key={ key }
-      className="Recommended-card"
+      className="recommended-card"
       data-testid={ `${index}-recomendation-card` }
     >
       <img src={ photo } alt={ title } />
@@ -14,7 +15,7 @@ function RecommendedCard({ key, index, photo, title, category }) {
       >
         { title }
       </h3>
-      <h6>{ category }</h6>
+      <h7>{ category }</h7>
     </div>
   );
 }
