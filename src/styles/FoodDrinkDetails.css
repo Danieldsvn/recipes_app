@@ -16,3 +16,8 @@
   height: 80%;
   width: 100%;
 }
+
+.start-recipe {
+  bottom: 0;
+  position: fixed;
+}

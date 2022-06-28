@@ -78,6 +78,7 @@ function FoodDetails() {
   );
   const startRecipeButton = (
     <button
+      className="start-recipe"
       type="button"
       data-testid="start-recipe-btn"
     >

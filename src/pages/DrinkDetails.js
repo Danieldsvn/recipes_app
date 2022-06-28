@@ -82,7 +82,13 @@ function DrinkDetails() {
           ))}
       </section>
       <footer>
-        <button type="button" data-testid="start-recipe-btn">Start Recipe</button>
+        <button
+          className="start-recipe"
+          type="button"
+          data-testid="start-recipe-btn"
+        >
+          Start Recipe
+        </button>
       </footer>
     </div>
   );
