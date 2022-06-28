@@ -1,9 +1,13 @@
-async function getFoodAndDrinkById(id) {
-  const foodApi = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
-  const drinkApi = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
-  const { meals } = await fetch(foodApi).then((response) => response.json());
-  const { drinks } = await fetch(drinkApi).then((response) => response.json());
-  return { meals, drinks };
+export async function getFoodById(id) {
+  const endPoint = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
+  const response = await fetch(endPoint);
+  const data = await response.json();
+  return data;
 }
 
-export default getFoodAndDrinkById;
+export async function getDrinkById(id) {
+  const endPoint = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
+  const response = await fetch(endPoint);
+  const data = await response.json();
+  return data;
+}

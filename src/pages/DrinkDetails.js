@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import DetailsHeader from '../components/DetailsHeader';
 import RecommendedCard from '../components/RecommendedCard';
-import getFoodAndDrinkById from '../hooks/getFoodAndDrinkById';
+import { getDrinkById } from '../hooks/getFoodAndDrinkById';
 import getFoodsAndDrinks from '../hooks/getFoodsAndDrinks';
 import getIngredientsAndMeasures from '../hooks/getIngredientsAndMesures';
 
@@ -22,7 +22,7 @@ function DrinkDetails() {
     const locationArray = location.pathname.split('s/', 2);
     const drinkId = locationArray[1];
     const getDrinkDetailsFoodRecomedation = async () => {
-      const { drinks } = await getFoodAndDrinkById(drinkId);
+      const drinks = await getDrinkById(drinkId);
       const { meals } = await getFoodsAndDrinks();
       setDrinkAttributes(drinks);
       setIngredients(getIngredientsAndMeasures(drinks));

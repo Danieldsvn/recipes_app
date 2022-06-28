@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import RecommendedCard from '../components/RecommendedCard';
 import DetailsHeader from '../components/DetailsHeader';
-import getFoodAndDrinkById from '../hooks/getFoodAndDrinkById';
+import { getFoodById } from '../hooks/getFoodAndDrinkById';
 import getFoodsAndDrinks from '../hooks/getFoodsAndDrinks';
 import getIngredientsAndMeasures from '../hooks/getIngredientsAndMesures';
 
@@ -20,13 +20,15 @@ function FoodDetails() {
   useEffect(() => {
     const locationArray = location.pathname.split('s/', 2);
     const foodId = locationArray[1];
+    console.log(foodId);
     const getFoodDetailsDrinkRecommendation = async () => {
-      const { meals } = await getFoodAndDrinkById(foodId);
+      const data = await getFoodById(foodId);
+      console.log(data);
       const { drinks } = await getFoodsAndDrinks();
-      setFoodAttributes(meals);
-      setIngredients(getIngredientsAndMeasures(meals));
+      setFoodAttributes(data);
+      setIngredients(getIngredientsAndMeasures(data));
       setRecommendedDrinks(drinks);
-      if (foodAttributes !== undefined) setLoading(false);
+      setLoading(false);
     };
     getFoodDetailsDrinkRecommendation();
     console.log(foodAttributes[0]);
