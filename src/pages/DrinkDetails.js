@@ -25,7 +25,6 @@ function DrinkDetails() {
     const getDrinkDetailsFoodRecomedation = async () => {
       const { drinks } = await getDrinkById(drinkId);
       const { meals } = await getFoodsAndDrinks();
-      console.log(drinks);
       setDrinkAttributes(drinks);
       setIngredients(getIngredientsAndMeasures(drinks));
       setRecommendedFoods(meals);
