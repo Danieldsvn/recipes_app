@@ -25,6 +25,7 @@ function FoodDetails() {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [isFavorite, setIsFavorite] = useState(whiteHeartIcon);
+  const [allFavorites, setAllFavorites] = useState([]);
 
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
@@ -32,9 +33,20 @@ function FoodDetails() {
     return foodId;
   };
 
+  const getFavoriteLocalStorage = (id) => {
+    if (localStorage.getItem('favoriteRecipes') !== null) {
+      const appFavoritesString = localStorage.getItem('favoriteRecipes');
+      const appFavorites = JSON.parse(appFavoritesString);
+      setAllFavorites(appFavorites);
+      const isThisRecipeFavorite = appFavorites.some((favorite) => favorite.id === id);
+      if (isThisRecipeFavorite) setIsFavorite(blackHeartIcon);
+    } else localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+  };
+
   useEffect(() => {
     const foodId = getIdFromLocation();
     console.log(foodId);
+    getFavoriteLocalStorage(foodId);
     const getFoodDetailsDrinkRecommendation = async () => {
       const { meals } = await getFoodById(foodId);
       const { drinks } = await getFoodsAndDrinks();
@@ -49,6 +61,9 @@ function FoodDetails() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    console.log(foodAttributes[0]);
+  }, [foodAttributes]);
   const handleStartButtonClick = () => {
     console.log('handleStartButtonClick foi chamada');
     const foodId = getIdFromLocation();
@@ -56,7 +71,23 @@ function FoodDetails() {
   };
 
   const handleFavoriteButton = () => {
-    if (isFavorite === whiteHeartIcon) setIsFavorite(blackHeartIcon);
+    if (isFavorite === whiteHeartIcon) {
+      localStorage.setItem('favoriteRecipes', JSON.stringify(
+        [
+          ...allFavorites,
+          {
+            id: foodAttributes[0].idMeal,
+            type: 'food',
+            nationality: foodAttributes[0].strArea,
+            category: foodAttributes[0].strCategory,
+            alcoholicOrNot: '',
+            name: foodAttributes[0].strMeal,
+            image: foodAttributes[0].strMealThumb,
+          },
+        ],
+      ));
+      setIsFavorite(blackHeartIcon);
+    }
     if (isFavorite === blackHeartIcon) setIsFavorite(whiteHeartIcon);
   };
 
