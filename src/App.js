@@ -18,6 +18,7 @@ import ExploreDrinksByIngredients from './pages/ExploreDrinksByIngredients';
 import ExploreFoodsByNationalities from './pages/ExploreFoodsByNationalities';
 import DoneRecipes from './pages/DoneRecipes';
 import FavoriteRecipes from './pages/FavoriteRecipes';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -52,6 +53,10 @@ function App() {
           <Route exact path="/profile" component={ Profile } />
           <Route exact path="/done-recipes" component={ DoneRecipes } />
           <Route exact path="/favorite-recipes" component={ FavoriteRecipes } />
+          <Route
+            path="/"
+            component={ NotFound }
+          />
         </Switch>
       </BrowserRouter>
     </div>
