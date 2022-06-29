@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import copy from 'clipboard-copy';
 import RecommendedCard from '../components/RecommendedCard';
 import DetailsHeader from '../components/DetailsHeader';
 import { getFoodById } from '../hooks/getFoodAndDrinkById';
 import getFoodsAndDrinks from '../hooks/getFoodsAndDrinks';
 import getIngredientsAndMeasures from '../hooks/getIngredientsAndMesures';
 import '../styles/FoodDrinkDetails.css';
+import shareIcon from '../images/shareIcon.svg';
 
 function FoodDetails() {
   const location = useLocation();
@@ -19,6 +21,7 @@ function FoodDetails() {
   });
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
@@ -47,6 +50,12 @@ function FoodDetails() {
     console.log('handleStartButtonClick foi chamada');
     const foodId = getIdFromLocation();
     history.push(`/foods/${foodId}/in-progress`);
+  };
+
+  const copyToClipboard = () => {
+    setCopied(true);
+    const url = `http://localhost:3000${location.pathname}`;
+    copy(url);
   };
 
   const cardsNumber = 6;
@@ -102,7 +111,10 @@ function FoodDetails() {
         title={ foodAttributes[0].strMeal }
         photo={ foodAttributes[0].strMealThumb }
         category={ foodAttributes[0].strCategory }
+        shareSrc={ shareIcon }
+        clipboardCopy={ copyToClipboard }
       />}
+      { copied && <p>Link copied!</p>}
       { !loading && instructionsIngredientsVideoHtml() }
       <section className="recommended-list">
         { !loading && recommendedDrinks

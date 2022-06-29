@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import copy from 'clipboard-copy';
 import DetailsHeader from '../components/DetailsHeader';
 import RecommendedCard from '../components/RecommendedCard';
 import { getDrinkById } from '../hooks/getFoodAndDrinkById';
 import getFoodsAndDrinks from '../hooks/getFoodsAndDrinks';
 import getIngredientsAndMeasures from '../hooks/getIngredientsAndMesures';
 import '../styles/FoodDrinkDetails.css';
+import shareIcon from '../images/shareIcon.svg';
 
 function DrinkDetails() {
   const location = useLocation();
@@ -19,6 +21,7 @@ function DrinkDetails() {
   });
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
@@ -44,6 +47,12 @@ function DrinkDetails() {
     console.log('handleStartButtonClick foi chamada');
     const drinkId = getIdFromLocation();
     history.push(`/drinks/${drinkId}/in-progress`);
+  };
+
+  const copyToClipboard = () => {
+    setCopied(true);
+    const url = `http://localhost:3000${location.pathname}`;
+    copy(url);
   };
 
   const cardsNumber = 6;
@@ -78,7 +87,10 @@ function DrinkDetails() {
         title={ drinkAttributes[0].strDrink }
         photo={ drinkAttributes[0].strDrinkThumb }
         category={ drinkAttributes[0].strAlcoholic }
+        shareSrc={ shareIcon }
+        clipboardCopy={ copyToClipboard }
       /> }
+      { copied && <p>Link copied!</p>}
       { !loading && instructionsIngredientsHtml()}
       <section className="recommended-list">
         { !loading && recommendedFoods
