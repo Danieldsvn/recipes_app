@@ -21,12 +21,12 @@ function FoodDetails() {
   const [recommendedDrinks, setRecommendedDrinks] = useState({
     drinks: [],
   });
+  const [pageId, setPageId] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [isFavorite, setIsFavorite] = useState(whiteHeartIcon);
   const [allFavorites, setAllFavorites] = useState([]);
-  const [pageId, setPageId] = useState('');
 
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
