@@ -47,7 +47,6 @@ function FoodDetails() {
 
   useEffect(() => {
     const foodId = getIdFromLocation();
-    console.log(foodId);
     getFavoriteLocalStorage(foodId);
     const getFoodDetailsDrinkRecommendation = async () => {
       const { meals } = await getFoodById(foodId);
@@ -58,8 +57,6 @@ function FoodDetails() {
       setLoading(false);
     };
     getFoodDetailsDrinkRecommendation();
-    console.log(foodAttributes[0]);
-    // console.log(foodAttributes[0].strIngredient1);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
