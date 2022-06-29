@@ -15,7 +15,7 @@ function RecommendedCard({ key, index, photo, title, category }) {
       >
         { title }
       </h3>
-      <h7>{ category }</h7>
+      <p>{ category }</p>
     </div>
   );
 }

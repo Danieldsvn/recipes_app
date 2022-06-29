@@ -45,7 +45,7 @@ function FoodDetails() {
     (
       <section>
         <div className="ingredients-section">
-          <h2>Ingredients</h2>
+          <h3>Ingredients</h3>
           <ul className="ingredients-list">
             { ingredients.map((ingredient, index) => (
               <li
@@ -58,17 +58,17 @@ function FoodDetails() {
           </ul>
         </div>
         <div className="instructions">
-          <h2>Instructions</h2>
+          <h3>Instructions</h3>
           <div>
             <p data-testid="instructions">{foodAttributes[0].strInstructions}</p>
           </div>
         </div>
         <div className="Video">
-          <h2>Video</h2>
+          <h3>Video</h3>
           <iframe
             data-testid="video"
-            width="360"
-            height="360"
+            width="240"
+            height="240"
             src={ foodAttributes[0].strYoutube }
             title="How to Make Homemade Italian Lasagna Bolognese"
             allowFullScreen
