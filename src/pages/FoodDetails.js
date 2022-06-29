@@ -8,6 +8,8 @@ import getFoodsAndDrinks from '../hooks/getFoodsAndDrinks';
 import getIngredientsAndMeasures from '../hooks/getIngredientsAndMesures';
 import '../styles/FoodDrinkDetails.css';
 import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 function FoodDetails() {
   const location = useLocation();
@@ -22,6 +24,7 @@ function FoodDetails() {
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(whiteHeartIcon);
 
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
@@ -50,6 +53,11 @@ function FoodDetails() {
     console.log('handleStartButtonClick foi chamada');
     const foodId = getIdFromLocation();
     history.push(`/foods/${foodId}/in-progress`);
+  };
+
+  const handleFavoriteButton = () => {
+    if (isFavorite === whiteHeartIcon) setIsFavorite(blackHeartIcon);
+    if (isFavorite === blackHeartIcon) setIsFavorite(whiteHeartIcon);
   };
 
   const copyToClipboard = () => {
@@ -112,6 +120,8 @@ function FoodDetails() {
         photo={ foodAttributes[0].strMealThumb }
         category={ foodAttributes[0].strCategory }
         shareSrc={ shareIcon }
+        favSrc={ isFavorite }
+        handleFavoriteButton={ handleFavoriteButton }
         clipboardCopy={ copyToClipboard }
       />}
       { copied && <p>Link copied!</p>}

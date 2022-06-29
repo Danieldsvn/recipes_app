@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '../styles/FoodDrinkDetails.css';
 
-function DetailsHeader({ title, photo, category, shareSrc, clipboardCopy }) {
+function DetailsHeader({ title, photo, category,
+  shareSrc, clipboardCopy, favSrc, handleFavoriteButton }) {
   return (
     <header className="details-header">
       <img
@@ -20,7 +21,13 @@ function DetailsHeader({ title, photo, category, shareSrc, clipboardCopy }) {
         >
           <img src={ shareSrc } alt="share-button" />
         </button>
-        <button data-testid="favorite-btn" type="button">favorito</button>
+        <button
+          data-testid="favorite-btn"
+          type="button"
+          onClick={ () => handleFavoriteButton() }
+        >
+          <img src={ favSrc } alt="favorite-button" />
+        </button>
       </div>
       <p data-testid="recipe-category">{ category }</p>
     </header>
@@ -33,6 +40,8 @@ DetailsHeader.propTypes = {
   category: PropTypes.string.isRequired,
   shareSrc: PropTypes.string.isRequired,
   clipboardCopy: PropTypes.func.isRequired,
+  favSrc: PropTypes.string.isRequired,
+  handleFavoriteButton: PropTypes.func.isRequired,
 };
 
 export default DetailsHeader;
