@@ -1,0 +1,35 @@
+.favorite-list {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.favorite-card {
+  background-color: aliceblue;
+  border-radius: 6px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: row;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  height: 143px;
+  margin: 5px;
+  width: 333px;
+}
+
+.favorite-card img {
+  border-radius: 4px 0 0 4px;
+  height: 143px;
+  width: 165px;
+}
+
+.favorite-card button img {
+  height: 21px;
+  width: 21px;
+}
+
+.favorite-card span {
+  height: 25px;
+  width: 52px;
+}
