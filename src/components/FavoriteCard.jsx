@@ -5,7 +5,7 @@ import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
-function FavoriteCard({ index, favorite, deleteFavoriteCard }) {
+function FavoriteCard({ index, favorite, deleteFavoriteCard, callback }) {
   const { id, type, category, name, image,
     alcoholicOrNot, nationality } = favorite;
   const [copyText, setCopyText] = useState('');
@@ -29,12 +29,30 @@ function FavoriteCard({ index, favorite, deleteFavoriteCard }) {
       <div
         className="favorite-card"
       >
-        <div className="card-content">
-          <img data-testid={ `${index}-horizontal-image` } src={ image } alt={ name } />
+        <div
+          className="card-content"
+          onClick={ () => callback(id, type) }
+          role="button"
+          tabIndex={ 0 }
+          onKeyPress={ () => {} }
+        >
+          <img
+            data-testid={ `${index}-horizontal-image` }
+            src={ image }
+            alt={ name }
+          />
         </div>
         <div className="card-content" data-testid={ `${index}-horizontal-top-text` }>
           { type === 'drink' ? `${alcoholicOrNot}` : `${nationality} - ${category}` }
-          <div data-testid={ `${index}-horizontal-name` }>{ name }</div>
+          <div
+            data-testid={ `${index}-horizontal-name` }
+            onClick={ () => callback(id, type) }
+            role="button"
+            tabIndex={ 0 }
+            onKeyPress={ () => {} }
+          >
+            { name }
+          </div>
           <button
             type="button"
             data-testid={ `${index}-horizontal-share-btn` }
@@ -68,6 +86,7 @@ FavoriteCard.propTypes = {
   nationality: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   deleteFavoriteCard: PropTypes.func.isRequired,
+  callback: PropTypes.func.isRequired,
 };
 
 export default FavoriteCard;
