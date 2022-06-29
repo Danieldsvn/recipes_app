@@ -36,9 +36,6 @@ function FoodDetails() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    console.log(foodAttributes[0]);
-  }, [foodAttributes]);
   const cardsNumber = 6;
 
   const instructionsIngredientsVideoHtml = () => (
