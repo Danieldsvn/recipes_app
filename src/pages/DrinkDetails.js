@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import DetailsHeader from '../components/DetailsHeader';
 import RecommendedCard from '../components/RecommendedCard';
 import { getDrinkById } from '../hooks/getFoodAndDrinkById';
@@ -9,6 +9,7 @@ import '../styles/FoodDrinkDetails.css';
 
 function DrinkDetails() {
   const location = useLocation();
+  const history = useHistory();
 
   const [drinkAttributes, setDrinkAttributes] = useState({
     drinks: [],
@@ -19,9 +20,14 @@ function DrinkDetails() {
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
     const drinkId = locationArray[1];
+    return drinkId;
+  };
+
+  useEffect(() => {
+    const drinkId = getIdFromLocation();
     const getDrinkDetailsFoodRecomedation = async () => {
       const { drinks } = await getDrinkById(drinkId);
       const { meals } = await getFoodsAndDrinks();
@@ -33,6 +39,12 @@ function DrinkDetails() {
     getDrinkDetailsFoodRecomedation();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleStartButtonClick = () => {
+    console.log('handleStartButtonClick foi chamada');
+    const drinkId = getIdFromLocation();
+    history.push(`/drinks/${drinkId}/in-progress`);
+  };
 
   const cardsNumber = 6;
 
@@ -86,6 +98,7 @@ function DrinkDetails() {
           className="start-recipe"
           type="button"
           data-testid="start-recipe-btn"
+          onClick={ handleStartButtonClick }
         >
           Start Recipe
         </button>
