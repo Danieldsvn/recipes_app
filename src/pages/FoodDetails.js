@@ -1,27 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
+import copy from 'clipboard-copy';
 import RecommendedCard from '../components/RecommendedCard';
 import DetailsHeader from '../components/DetailsHeader';
 import { getFoodById } from '../hooks/getFoodAndDrinkById';
 import getFoodsAndDrinks from '../hooks/getFoodsAndDrinks';
 import getIngredientsAndMeasures from '../hooks/getIngredientsAndMesures';
 import '../styles/FoodDrinkDetails.css';
+import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 function FoodDetails() {
   const location = useLocation();
+  const history = useHistory();
+
   const [foodAttributes, setFoodAttributes] = useState({
     meals: [],
   });
   const [recommendedDrinks, setRecommendedDrinks] = useState({
     drinks: [],
   });
+  const [pageId, setPageId] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(whiteHeartIcon);
+  const [allFavorites, setAllFavorites] = useState([]);
 
-  useEffect(() => {
+  const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
     const foodId = locationArray[1];
-    console.log(foodId);
+    setPageId(foodId);
+    return foodId;
+  };
+
+  const getFavoriteLocalStorage = (id) => {
+    if (localStorage.getItem('favoriteRecipes') !== null) {
+      const appFavoritesString = localStorage.getItem('favoriteRecipes');
+      const appFavorites = JSON.parse(appFavoritesString);
+      setAllFavorites(appFavorites);
+      const isThisRecipeFavorite = appFavorites.some((favorite) => favorite.id === id);
+      if (isThisRecipeFavorite) setIsFavorite(blackHeartIcon);
+    } else localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+  };
+
+  useEffect(() => {
+    const foodId = getIdFromLocation();
+    getFavoriteLocalStorage(foodId);
     const getFoodDetailsDrinkRecommendation = async () => {
       const { meals } = await getFoodById(foodId);
       const { drinks } = await getFoodsAndDrinks();
@@ -31,10 +57,45 @@ function FoodDetails() {
       setLoading(false);
     };
     getFoodDetailsDrinkRecommendation();
-    console.log(foodAttributes[0]);
-    // console.log(foodAttributes[0].strIngredient1);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleStartButtonClick = () => {
+    history.push(`/foods/${pageId}/in-progress`);
+  };
+
+  const handleFavoriteButton = () => {
+    if (isFavorite === whiteHeartIcon) {
+      setIsFavorite(blackHeartIcon);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(
+        [
+          ...allFavorites,
+          {
+            id: foodAttributes[0].idMeal,
+            type: 'food',
+            nationality: foodAttributes[0].strArea,
+            category: foodAttributes[0].strCategory,
+            alcoholicOrNot: '',
+            name: foodAttributes[0].strMeal,
+            image: foodAttributes[0].strMealThumb,
+          },
+        ],
+      ));
+    }
+    if (isFavorite === blackHeartIcon) {
+      setIsFavorite(whiteHeartIcon);
+      const allFavoritesAfterRemoveThis = allFavorites
+        .filter((favorite) => favorite.id !== pageId);
+      localStorage
+        .setItem('favoriteRecipes', JSON.stringify(allFavoritesAfterRemoveThis));
+    }
+  };
+
+  const copyToClipboard = () => {
+    setCopied(true);
+    const url = `http://localhost:3000${location.pathname}`;
+    copy(url);
+  };
 
   const cardsNumber = 6;
 
@@ -78,6 +139,7 @@ function FoodDetails() {
       className="start-recipe"
       type="button"
       data-testid="start-recipe-btn"
+      onClick={ handleStartButtonClick }
     >
       Start Recipe
     </button>
@@ -88,7 +150,12 @@ function FoodDetails() {
         title={ foodAttributes[0].strMeal }
         photo={ foodAttributes[0].strMealThumb }
         category={ foodAttributes[0].strCategory }
+        shareSrc={ shareIcon }
+        favSrc={ isFavorite }
+        handleFavoriteButton={ handleFavoriteButton }
+        clipboardCopy={ copyToClipboard }
       />}
+      { copied && <p>Link copied!</p>}
       { !loading && instructionsIngredientsVideoHtml() }
       <section className="recommended-list">
         { !loading && recommendedDrinks

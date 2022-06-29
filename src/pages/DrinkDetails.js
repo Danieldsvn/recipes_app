@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
+import copy from 'clipboard-copy';
 import DetailsHeader from '../components/DetailsHeader';
 import RecommendedCard from '../components/RecommendedCard';
 import { getDrinkById } from '../hooks/getFoodAndDrinkById';
 import getFoodsAndDrinks from '../hooks/getFoodsAndDrinks';
 import getIngredientsAndMeasures from '../hooks/getIngredientsAndMesures';
 import '../styles/FoodDrinkDetails.css';
+import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 function DrinkDetails() {
   const location = useLocation();
+  const history = useHistory();
 
   const [drinkAttributes, setDrinkAttributes] = useState({
     drinks: [],
@@ -16,12 +21,33 @@ function DrinkDetails() {
   const [recommendedFoods, setRecommendedFoods] = useState({
     meals: [],
   });
+  const [pageId, setPageId] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(whiteHeartIcon);
+  const [allFavorites, setAllFavorites] = useState([]);
 
-  useEffect(() => {
+  const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
     const drinkId = locationArray[1];
+    setPageId(drinkId);
+    return drinkId;
+  };
+
+  const getFavoriteLocalStorage = (id) => {
+    if (localStorage.getItem('favoriteRecipes') !== null) {
+      const appFavoritesString = localStorage.getItem('favoriteRecipes');
+      const appFavorites = JSON.parse(appFavoritesString);
+      setAllFavorites(appFavorites);
+      const isThisRecipeFavorite = appFavorites.some((favorite) => favorite.id === id);
+      if (isThisRecipeFavorite) setIsFavorite(blackHeartIcon);
+    } else localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+  };
+
+  useEffect(() => {
+    const drinkId = getIdFromLocation();
+    getFavoriteLocalStorage(drinkId);
     const getDrinkDetailsFoodRecomedation = async () => {
       const { drinks } = await getDrinkById(drinkId);
       const { meals } = await getFoodsAndDrinks();
@@ -33,6 +59,43 @@ function DrinkDetails() {
     getDrinkDetailsFoodRecomedation();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleStartButtonClick = () => {
+    history.push(`/drinks/${pageId}/in-progress`);
+  };
+
+  const handleFavoriteButton = () => {
+    if (isFavorite === whiteHeartIcon) {
+      setIsFavorite(blackHeartIcon);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(
+        [
+          ...allFavorites,
+          {
+            id: drinkAttributes[0].idDrink,
+            type: 'drink',
+            nationality: drinkAttributes[0].strArea,
+            category: drinkAttributes[0].strCategory,
+            alcoholicOrNot: drinkAttributes[0].strAlcoholic,
+            name: drinkAttributes[0].strDrink,
+            image: drinkAttributes[0].strDrinkThumb,
+          },
+        ],
+      ));
+    }
+    if (isFavorite === blackHeartIcon) {
+      setIsFavorite(whiteHeartIcon);
+      const allFavoritesAfterRemoveThis = allFavorites
+        .filter((favorite) => favorite.id !== pageId);
+      localStorage
+        .setItem('favoriteRecipes', JSON.stringify(allFavoritesAfterRemoveThis));
+    }
+  };
+
+  const copyToClipboard = () => {
+    setCopied(true);
+    const url = `http://localhost:3000${location.pathname}`;
+    copy(url);
+  };
 
   const cardsNumber = 6;
 
@@ -66,7 +129,12 @@ function DrinkDetails() {
         title={ drinkAttributes[0].strDrink }
         photo={ drinkAttributes[0].strDrinkThumb }
         category={ drinkAttributes[0].strAlcoholic }
+        shareSrc={ shareIcon }
+        favSrc={ isFavorite }
+        handleFavoriteButton={ handleFavoriteButton }
+        clipboardCopy={ copyToClipboard }
       /> }
+      { copied && <p>Link copied!</p>}
       { !loading && instructionsIngredientsHtml()}
       <section className="recommended-list">
         { !loading && recommendedFoods
@@ -86,6 +154,7 @@ function DrinkDetails() {
           className="start-recipe"
           type="button"
           data-testid="start-recipe-btn"
+          onClick={ handleStartButtonClick }
         >
           Start Recipe
         </button>
