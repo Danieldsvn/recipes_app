@@ -26,10 +26,12 @@ function FoodDetails() {
   const [copied, setCopied] = useState(false);
   const [isFavorite, setIsFavorite] = useState(whiteHeartIcon);
   const [allFavorites, setAllFavorites] = useState([]);
+  const [pageId, setPageId] = useState('');
 
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
     const foodId = locationArray[1];
+    setPageId(foodId);
     return foodId;
   };
 
@@ -61,17 +63,13 @@ function FoodDetails() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    console.log(foodAttributes[0]);
-  }, [foodAttributes]);
   const handleStartButtonClick = () => {
-    console.log('handleStartButtonClick foi chamada');
-    const foodId = getIdFromLocation();
-    history.push(`/foods/${foodId}/in-progress`);
+    history.push(`/foods/${pageId}/in-progress`);
   };
 
   const handleFavoriteButton = () => {
     if (isFavorite === whiteHeartIcon) {
+      setIsFavorite(blackHeartIcon);
       localStorage.setItem('favoriteRecipes', JSON.stringify(
         [
           ...allFavorites,
@@ -86,9 +84,14 @@ function FoodDetails() {
           },
         ],
       ));
-      setIsFavorite(blackHeartIcon);
     }
-    if (isFavorite === blackHeartIcon) setIsFavorite(whiteHeartIcon);
+    if (isFavorite === blackHeartIcon) {
+      setIsFavorite(whiteHeartIcon);
+      const allFavoritesAfterRemoveThis = allFavorites
+        .filter((favorite) => favorite.id !== pageId);
+      localStorage
+        .setItem('favoriteRecipes', JSON.stringify(allFavoritesAfterRemoveThis));
+    }
   };
 
   const copyToClipboard = () => {

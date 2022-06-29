@@ -25,15 +25,29 @@ function DrinkDetails() {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [isFavorite, setIsFavorite] = useState(whiteHeartIcon);
+  const [allFavorites, setAllFavorites] = useState([]);
+  const [pageId, setPageId] = useState('');
 
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
     const drinkId = locationArray[1];
+    setPageId(drinkId);
     return drinkId;
+  };
+
+  const getFavoriteLocalStorage = (id) => {
+    if (localStorage.getItem('favoriteRecipes') !== null) {
+      const appFavoritesString = localStorage.getItem('favoriteRecipes');
+      const appFavorites = JSON.parse(appFavoritesString);
+      setAllFavorites(appFavorites);
+      const isThisRecipeFavorite = appFavorites.some((favorite) => favorite.id === id);
+      if (isThisRecipeFavorite) setIsFavorite(blackHeartIcon);
+    } else localStorage.setItem('favoriteRecipes', JSON.stringify([]));
   };
 
   useEffect(() => {
     const drinkId = getIdFromLocation();
+    getFavoriteLocalStorage(drinkId);
     const getDrinkDetailsFoodRecomedation = async () => {
       const { drinks } = await getDrinkById(drinkId);
       const { meals } = await getFoodsAndDrinks();
@@ -47,14 +61,34 @@ function DrinkDetails() {
   }, []);
 
   const handleStartButtonClick = () => {
-    console.log('handleStartButtonClick foi chamada');
-    const drinkId = getIdFromLocation();
-    history.push(`/drinks/${drinkId}/in-progress`);
+    history.push(`/drinks/${pageId}/in-progress`);
   };
 
   const handleFavoriteButton = () => {
-    if (isFavorite === whiteHeartIcon) setIsFavorite(blackHeartIcon);
-    if (isFavorite === blackHeartIcon) setIsFavorite(whiteHeartIcon);
+    if (isFavorite === whiteHeartIcon) {
+      setIsFavorite(blackHeartIcon);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(
+        [
+          ...allFavorites,
+          {
+            id: drinkAttributes[0].idDrink,
+            type: 'drink',
+            nationality: drinkAttributes[0].strArea,
+            category: drinkAttributes[0].strCategory,
+            alcoholicOrNot: drinkAttributes[0].strAlcoholic,
+            name: drinkAttributes[0].strDrink,
+            image: drinkAttributes[0].strDrinkThumb,
+          },
+        ],
+      ));
+    }
+    if (isFavorite === blackHeartIcon) {
+      setIsFavorite(whiteHeartIcon);
+      const allFavoritesAfterRemoveThis = allFavorites
+        .filter((favorite) => favorite.id !== pageId);
+      localStorage
+        .setItem('favoriteRecipes', JSON.stringify(allFavoritesAfterRemoveThis));
+    }
   };
 
   const copyToClipboard = () => {

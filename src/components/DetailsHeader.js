@@ -25,6 +25,7 @@ function DetailsHeader({ title, photo, category,
           data-testid="favorite-btn"
           type="button"
           onClick={ () => handleFavoriteButton() }
+          src={ favSrc }
         >
           <img src={ favSrc } alt="favorite-button" />
         </button>
