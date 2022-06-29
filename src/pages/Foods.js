@@ -55,6 +55,7 @@ function Foods() {
     <div>
       <Header pageTitle="Foods" search />
       <SearchBar />
+      <hr />
       <Filters categories={ categories } callback={ applyFilter } />
       { actualFoods.length < 1 || !actualFoods ? <h1>Loading...</h1>
         : (

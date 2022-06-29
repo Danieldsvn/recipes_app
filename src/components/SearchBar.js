@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import MyContext from '../context/context';
+import '../styles/Foods.css';
 
 function SearchBar() {
   const { searchBar, setSingleSearchResult } = useContext(MyContext);
@@ -166,30 +167,42 @@ function SearchBar() {
           </button>
         </div>
       )}
-      { searchBarData.cardType === '/foods' && searchBarData.cards
-        .filter((_card, index) => (index < cardsNumber))
-        .map((card, index) => (
-          <div key={ index } data-testid={ `${index}-recipe-card` }>
-            <img
-              data-testid={ `${index}-card-img` }
-              src={ card.strMealThumb }
-              alt={ card.strMeal }
-            />
-            <p data-testid={ `${index}-card-name` }>{ card.strMeal }</p>
-          </div>
-        ))}
-      { searchBarData.cardType === '/drinks' && searchBarData.cards
-        .filter((_card, index) => (index < cardsNumber))
-        .map((card, index) => (
-          <div key={ index } data-testid={ `${index}-recipe-card` }>
-            <img
-              data-testid={ `${index}-card-img` }
-              src={ card.strDrinkThumb }
-              alt={ card.strDrink }
-            />
-            <p data-testid={ `${index}-card-name` }>{ card.strDrink }</p>
-          </div>
-        ))}
+      <div className="recipes-list">
+        { searchBarData.cardType === '/foods' && searchBarData.cards
+          .filter((_card, index) => (index < cardsNumber))
+          .map((card, index) => (
+            <div
+              key={ index }
+              data-testid={ `${index}-recipe-card` }
+              className="recipe-card"
+            >
+              <img
+                data-testid={ `${index}-card-img` }
+                src={ card.strMealThumb }
+                alt={ card.strMeal }
+              />
+              <p data-testid={ `${index}-card-name` }>{ card.strMeal }</p>
+            </div>
+          ))}
+      </div>
+      <div className="recipes-list">
+        { searchBarData.cardType === '/drinks' && searchBarData.cards
+          .filter((_card, index) => (index < cardsNumber))
+          .map((card, index) => (
+            <div
+              key={ index }
+              data-testid={ `${index}-recipe-card` }
+              className="recipe-card"
+            >
+              <img
+                data-testid={ `${index}-card-img` }
+                src={ card.strDrinkThumb }
+                alt={ card.strDrink }
+              />
+              <p data-testid={ `${index}-card-name` }>{ card.strDrink }</p>
+            </div>
+          ))}
+      </div>
     </div>
   );
 }
