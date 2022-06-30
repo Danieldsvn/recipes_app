@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import FavoriteCard from '../components/FavoriteCard';
 import '../styles/FavoriteRecipes.css';
 import MyContext from '../context/context';
+import FillsButtons from '../components/FillsButtons';
 
 function FavoriteRecipes() {
   const { myFavorites, setMyFavorites } = useContext(MyContext);
@@ -42,34 +43,14 @@ function FavoriteRecipes() {
   return (
     <div>
       <Header pageTitle="Favorite Recipes" />
-      <button
-        type="button"
-        data-testid="filter-by-all-btn"
-        onClick={ () => filterFavorites('all') }
-      >
-        All
-      </button>
-      <button
-        type="button"
-        data-testid="filter-by-food-btn"
-        onClick={ () => filterFavorites('food') }
-      >
-        Food
-      </button>
-      <button
-        type="button"
-        data-testid="filter-by-drink-btn"
-        onClick={ () => filterFavorites('drink') }
-      >
-        Drinks
-      </button>
+      <FillsButtons filter={ filterFavorites } />
       <div className="favorite-list">
         { actualFavorites.map((favorite, index) => (
           <FavoriteCard
             index={ index }
             favorite={ favorite }
             key={ favorite.name }
-            deleteFavoriteCard={ deleteFavoriteCard }
+            deleteCard={ deleteFavoriteCard }
             callback={ redirectDetails }
           />
         ))}

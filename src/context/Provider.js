@@ -8,6 +8,7 @@ function Provider({ children }) {
   const [allDrinks, setAllDrinks] = useState([]);
   const [searchBar, setSearchBar] = useState(false);
   const [myFavorites, setMyFavorites] = useState([]);
+  const [myRecipes, setMyRecipes] = useState([]);
   const [singleSearchResult, setSingleSearchResult] = useState(['SearchBarResult']); // Armazena as informações da receita quando a pesquisa tiver um resultado
 
   const INITIAL_STATE = {
@@ -23,6 +24,8 @@ function Provider({ children }) {
     setSingleSearchResult,
     myFavorites,
     setMyFavorites,
+    myRecipes,
+    setMyRecipes,
   };
 
   return (

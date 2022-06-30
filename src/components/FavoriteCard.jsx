@@ -5,9 +5,9 @@ import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
-function FavoriteCard({ index, favorite, deleteFavoriteCard, callback }) {
+function FavoriteCard({ index, infos, deleteCard, callback }) {
   const { id, type, category, name, image,
-    alcoholicOrNot, nationality } = favorite;
+    alcoholicOrNot, nationality, doneDate, tags } = infos;
   const [copyText, setCopyText] = useState('');
 
   useEffect(() => {
@@ -44,6 +44,21 @@ function FavoriteCard({ index, favorite, deleteFavoriteCard, callback }) {
         </div>
         <div className="card-content" data-testid={ `${index}-horizontal-top-text` }>
           { type === 'drink' ? `${alcoholicOrNot}` : `${nationality} - ${category}` }
+          <div>
+            { doneDate ? (
+              <span data-testid={ `${index}-horizontal-done-date` }>
+                {doneDate}
+              </span>
+            ) : '' }
+            { tags.length > 0 ? (tags.map((tag) => (
+              <span
+                key={ tag }
+                data-testid={ `${index}-${tag}-horizontal-tag` }
+              >
+                {tag}
+              </span>
+            ))) : '' }
+          </div>
           <div
             data-testid={ `${index}-horizontal-name` }
             onClick={ () => callback(id, type) }
@@ -64,7 +79,7 @@ function FavoriteCard({ index, favorite, deleteFavoriteCard, callback }) {
           <button
             type="button"
             data-testid={ `${index}-horizontal-favorite-btn` }
-            onClick={ () => deleteFavoriteCard(index) }
+            onClick={ () => deleteCard(index) }
             src={ blackHeartIcon }
           >
             <img src={ blackHeartIcon } alt="search" />
@@ -76,16 +91,9 @@ function FavoriteCard({ index, favorite, deleteFavoriteCard, callback }) {
 }
 
 FavoriteCard.propTypes = {
-  favorite: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
+  infos: PropTypes.node.isRequired,
   index: PropTypes.number.isRequired,
-  alcoholicOrNot: PropTypes.string.isRequired,
-  category: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  nationality: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  deleteFavoriteCard: PropTypes.func.isRequired,
+  deleteCard: PropTypes.func.isRequired,
   callback: PropTypes.func.isRequired,
 };
 
