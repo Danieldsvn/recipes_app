@@ -48,7 +48,7 @@ function FavoriteRecipes() {
         { actualFavorites.map((favorite, index) => (
           <FavoriteCard
             index={ index }
-            favorite={ favorite }
+            infos={ favorite }
             key={ favorite.name }
             deleteCard={ deleteFavoriteCard }
             callback={ redirectDetails }

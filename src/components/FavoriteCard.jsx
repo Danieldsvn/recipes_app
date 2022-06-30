@@ -50,7 +50,7 @@ function FavoriteCard({ index, infos, deleteCard, callback }) {
                 {doneDate}
               </span>
             ) : '' }
-            { tags.length > 0 ? (tags.map((tag) => (
+            { tags && tags.length > 0 ? (tags.map((tag) => (
               <span
                 key={ tag }
                 data-testid={ `${index}-${tag}-horizontal-tag` }
