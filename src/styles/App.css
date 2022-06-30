@@ -2,6 +2,7 @@ button {
   background-color: aliceblue;
   border: solid black 1px;
   border-radius: 6px;
+  box-shadow: 0 1px 5px 0 silver;
   margin: 2px;
 }
 
