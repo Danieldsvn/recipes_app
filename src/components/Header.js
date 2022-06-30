@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import MyContext from '../context/context';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
-import './Header.css';
+import '../styles/header.css';
 
 function Header({ pageTitle, search }) {
   const history = useHistory();
@@ -26,13 +26,13 @@ function Header({ pageTitle, search }) {
         <img src={ profileIcon } alt="profile" />
       </button>
 
-      <p
+      <h2
         data-testid="page-title"
       >
         {pageTitle}
-      </p>
+      </h2>
 
-      { search && (
+      { search ? (
         <button
           type="button"
           data-testid="search-top-btn"
@@ -42,6 +42,8 @@ function Header({ pageTitle, search }) {
         >
           <img src={ searchIcon } alt="search" />
         </button>
+      ) : (
+        <div className="fixTitlePosition" />
       )}
 
     </header>
