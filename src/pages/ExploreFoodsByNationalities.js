@@ -41,8 +41,6 @@ function ExploreFoodsByNationalities() {
     history.push(`/foods/${id}`);
   };
 
-  console.log(actualFoods);
-
   return (
     <div>
       <Header pageTitle="Explore Nationalities" search />
