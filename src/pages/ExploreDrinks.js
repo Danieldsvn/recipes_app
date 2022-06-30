@@ -1,11 +1,25 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useHistory, Link } from 'react-router-dom';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 function ExploreDrinks() {
   const history = useHistory();
+  const [randomDrink, setRandomDrink] = useState('');
+
+  useEffect(() => {
+    async function getIdDrink() {
+      const endPoint = 'https://www.thecocktaildb.com/api/json/v1/1/random.php';
+      const response = await fetch(endPoint);
+      const data = await response.json();
+      const values = Object.values(data);
+      const id = Object.values(values[0]);
+      const idReturn = Object.values(id[0]);
+      setRandomDrink(`/drinks/${idReturn[0]}`);
+    }
+    getIdDrink();
+  }, []);
 
   return (
 
@@ -21,12 +35,14 @@ function ExploreDrinks() {
         By Ingredient
       </button>
 
-      <button
-        data-testid="explore-surprise"
-        type="submit"
-      >
-        Surprise me!
-      </button>
+      <Link to={ randomDrink }>
+        <button
+          type="button"
+          data-testid="explore-surprise"
+        >
+          Surprise me!
+        </button>
+      </Link>
     </div>
   );
 }
