@@ -32,8 +32,6 @@ function DrinkDetails() {
   const [isDone, setIsDone] = useState(false);
   const [isInProgress, setIsInProgress] = useState(false);
 
-
-
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
     const drinkId = locationArray[1];
@@ -62,7 +60,7 @@ function DrinkDetails() {
     history.push(`/drinks/${pageId}/in-progress`);
   };
 
-  const handleFavoriteButton = () => {    
+  const handleFavoriteButton = () => {
     if (isFavorite === whiteHeartIcon) {
       setIsFavorite(blackHeartIcon);
       const favorites = [

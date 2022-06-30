@@ -32,7 +32,6 @@ function FoodDetails() {
   const [isDone, setIsDone] = useState(false);
   const [isInProgress, setIsInProgress] = useState(false);
 
-
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
     const foodId = locationArray[1];
