@@ -10,6 +10,8 @@ import '../styles/FoodDrinkDetails.css';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
+import { getDoneLocalStorage, getFavoriteLocalStorage,
+  getCocktailInProgressLocalStorage } from '../hooks/getLocalStorage';
 
 function DrinkDetails() {
   const location = useLocation();
@@ -27,6 +29,8 @@ function DrinkDetails() {
   const [copied, setCopied] = useState(false);
   const [isFavorite, setIsFavorite] = useState(whiteHeartIcon);
   const [allFavorites, setAllFavorites] = useState([]);
+  const [isDone, setIsDone] = useState(false);
+  const [isInProgress, setIsInProgress] = useState(false);
 
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
@@ -35,19 +39,11 @@ function DrinkDetails() {
     return drinkId;
   };
 
-  const getFavoriteLocalStorage = (id) => {
-    if (localStorage.getItem('favoriteRecipes') !== null) {
-      const appFavoritesString = localStorage.getItem('favoriteRecipes');
-      const appFavorites = JSON.parse(appFavoritesString);
-      setAllFavorites(appFavorites);
-      const isThisRecipeFavorite = appFavorites.some((favorite) => favorite.id === id);
-      if (isThisRecipeFavorite) setIsFavorite(blackHeartIcon);
-    } else localStorage.setItem('favoriteRecipes', JSON.stringify([]));
-  };
-
   useEffect(() => {
     const drinkId = getIdFromLocation();
-    getFavoriteLocalStorage(drinkId);
+    getFavoriteLocalStorage(drinkId, setAllFavorites, setIsFavorite, blackHeartIcon);
+    getCocktailInProgressLocalStorage(drinkId, setIsInProgress);
+    getDoneLocalStorage(drinkId, setIsDone);
     const getDrinkDetailsFoodRecomedation = async () => {
       const { drinks } = await getDrinkById(drinkId);
       const { meals } = await getFoodsAndDrinks();
@@ -67,20 +63,19 @@ function DrinkDetails() {
   const handleFavoriteButton = () => {
     if (isFavorite === whiteHeartIcon) {
       setIsFavorite(blackHeartIcon);
-      localStorage.setItem('favoriteRecipes', JSON.stringify(
-        [
-          ...allFavorites,
-          {
-            id: drinkAttributes[0].idDrink,
-            type: 'drink',
-            nationality: drinkAttributes[0].strArea,
-            category: drinkAttributes[0].strCategory,
-            alcoholicOrNot: drinkAttributes[0].strAlcoholic,
-            name: drinkAttributes[0].strDrink,
-            image: drinkAttributes[0].strDrinkThumb,
-          },
-        ],
-      ));
+      const favorites = [
+        ...allFavorites,
+        {
+          id: drinkAttributes[0].idDrink,
+          type: 'drink',
+          nationality: '',
+          category: drinkAttributes[0].strCategory,
+          alcoholicOrNot: drinkAttributes[0].strAlcoholic,
+          name: drinkAttributes[0].strDrink,
+          image: drinkAttributes[0].strDrinkThumb,
+        },
+      ];
+      localStorage.setItem('favoriteRecipes', JSON.stringify(favorites));
     }
     if (isFavorite === blackHeartIcon) {
       setIsFavorite(whiteHeartIcon);
@@ -123,6 +118,17 @@ function DrinkDetails() {
     </section>
   );
 
+  const startRecipeButton = () => (
+    <button
+      className="start-recipe"
+      type="button"
+      data-testid="start-recipe-btn"
+      onClick={ handleStartButtonClick }
+    >
+      { !isInProgress ? 'Start Recipe' : 'Continue Recipe'}
+    </button>
+  );
+
   return (
     <div>
       { !loading && <DetailsHeader
@@ -150,14 +156,7 @@ function DrinkDetails() {
           ))}
       </section>
       <footer>
-        <button
-          className="start-recipe"
-          type="button"
-          data-testid="start-recipe-btn"
-          onClick={ handleStartButtonClick }
-        >
-          Start Recipe
-        </button>
+        { !loading && !isDone && startRecipeButton() }
       </footer>
     </div>
   );
