@@ -10,7 +10,7 @@ import '../styles/FoodDrinkDetails.css';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
-import { getFavoriteLocalStorage } from '../hooks/getLocalStorage';
+import { getFavoriteLocalStorage, getDoneLocalStorage } from '../hooks/getLocalStorage';
 
 function FoodDetails() {
   const location = useLocation();
@@ -28,7 +28,7 @@ function FoodDetails() {
   const [copied, setCopied] = useState(false);
   const [isFavorite, setIsFavorite] = useState(whiteHeartIcon);
   const [allFavorites, setAllFavorites] = useState([]);
-  // const [ isRecipeDone, setIsRecipeDone] = useState(false);
+  const [isDone, setIsDone] = useState(false);
 
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
@@ -39,7 +39,8 @@ function FoodDetails() {
 
   useEffect(() => {
     const foodId = getIdFromLocation();
-    getFavoriteLocalStorage(foodId, setAllFavorites, setIsFavorite);
+    getFavoriteLocalStorage(foodId, setAllFavorites, setIsFavorite, blackHeartIcon);
+    getDoneLocalStorage(foodId, setIsDone);
     const getFoodDetailsDrinkRecommendation = async () => {
       const { meals } = await getFoodById(foodId);
       const { drinks } = await getFoodsAndDrinks();
@@ -163,7 +164,7 @@ function FoodDetails() {
           ))}
       </section>
       <footer>
-        { !loading && startRecipeButton() }
+        { !loading && !isDone && startRecipeButton() }
       </footer>
     </div>
   );

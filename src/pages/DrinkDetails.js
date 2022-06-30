@@ -10,7 +10,7 @@ import '../styles/FoodDrinkDetails.css';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
-import { getFavoriteLocalStorage } from '../hooks/getLocalStorage';
+import { getDoneLocalStorage, getFavoriteLocalStorage } from '../hooks/getLocalStorage';
 
 function DrinkDetails() {
   const location = useLocation();
@@ -28,6 +28,7 @@ function DrinkDetails() {
   const [copied, setCopied] = useState(false);
   const [isFavorite, setIsFavorite] = useState(whiteHeartIcon);
   const [allFavorites, setAllFavorites] = useState([]);
+  const [isDone, setIsDone] = useState(false);
 
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
@@ -38,7 +39,8 @@ function DrinkDetails() {
 
   useEffect(() => {
     const drinkId = getIdFromLocation();
-    getFavoriteLocalStorage(drinkId, setAllFavorites, setIsFavorite);
+    getFavoriteLocalStorage(drinkId, setAllFavorites, setIsFavorite, blackHeartIcon);
+    getDoneLocalStorage(drinkId, setIsDone);
     const getDrinkDetailsFoodRecomedation = async () => {
       const { drinks } = await getDrinkById(drinkId);
       const { meals } = await getFoodsAndDrinks();
@@ -114,6 +116,17 @@ function DrinkDetails() {
     </section>
   );
 
+  const startRecipeButton = () => (
+    <button
+      className="start-recipe"
+      type="button"
+      data-testid="start-recipe-btn"
+      onClick={ handleStartButtonClick }
+    >
+      Start Recipe
+    </button>
+  );
+
   return (
     <div>
       { !loading && <DetailsHeader
@@ -141,14 +154,7 @@ function DrinkDetails() {
           ))}
       </section>
       <footer>
-        <button
-          className="start-recipe"
-          type="button"
-          data-testid="start-recipe-btn"
-          onClick={ handleStartButtonClick }
-        >
-          Start Recipe
-        </button>
+        { !loading && !isDone && startRecipeButton() }
       </footer>
     </div>
   );
