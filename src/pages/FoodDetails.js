@@ -122,7 +122,8 @@ function FoodDetails() {
             data-testid="video"
             width="240"
             height="240"
-            src={ foodAttributes[0].strYoutube }
+            // a linha abaixo foi corrigida utilizando como base o site Stack Overflow, disponível em https://stackoverflow.com/questions/25661182/embed-youtube-video-refused-to-display-in-a-frame-because-it-set-x-frame-opti
+            src={ foodAttributes[0].strYoutube.replace('watch?v=', 'embed/') }
             title="How to Make Homemade Italian Lasagna Bolognese"
             allowFullScreen
           />
