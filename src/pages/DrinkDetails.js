@@ -10,6 +10,7 @@ import '../styles/FoodDrinkDetails.css';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
+import getFavoriteLocalStorage from '../hooks/getLocalStorage';
 
 function DrinkDetails() {
   const location = useLocation();
@@ -35,19 +36,9 @@ function DrinkDetails() {
     return drinkId;
   };
 
-  const getFavoriteLocalStorage = (id) => {
-    if (localStorage.getItem('favoriteRecipes') !== null) {
-      const appFavoritesString = localStorage.getItem('favoriteRecipes');
-      const appFavorites = JSON.parse(appFavoritesString);
-      setAllFavorites(appFavorites);
-      const isThisRecipeFavorite = appFavorites.some((favorite) => favorite.id === id);
-      if (isThisRecipeFavorite) setIsFavorite(blackHeartIcon);
-    } else localStorage.setItem('favoriteRecipes', JSON.stringify([]));
-  };
-
   useEffect(() => {
     const drinkId = getIdFromLocation();
-    getFavoriteLocalStorage(drinkId);
+    getFavoriteLocalStorage(drinkId, setAllFavorites, setIsFavorite);
     const getDrinkDetailsFoodRecomedation = async () => {
       const { drinks } = await getDrinkById(drinkId);
       const { meals } = await getFoodsAndDrinks();

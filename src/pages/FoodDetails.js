@@ -10,6 +10,7 @@ import '../styles/FoodDrinkDetails.css';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
+import getFavoriteLocalStorage from '../hooks/getLocalStorage';
 
 function FoodDetails() {
   const location = useLocation();
@@ -27,6 +28,7 @@ function FoodDetails() {
   const [copied, setCopied] = useState(false);
   const [isFavorite, setIsFavorite] = useState(whiteHeartIcon);
   const [allFavorites, setAllFavorites] = useState([]);
+  // const [ isRecipeDone, setIsRecipeDone] = useState(false);
 
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
@@ -35,19 +37,9 @@ function FoodDetails() {
     return foodId;
   };
 
-  const getFavoriteLocalStorage = (id) => {
-    if (localStorage.getItem('favoriteRecipes') !== null) {
-      const appFavoritesString = localStorage.getItem('favoriteRecipes');
-      const appFavorites = JSON.parse(appFavoritesString);
-      setAllFavorites(appFavorites);
-      const isThisRecipeFavorite = appFavorites.some((favorite) => favorite.id === id);
-      if (isThisRecipeFavorite) setIsFavorite(blackHeartIcon);
-    } else localStorage.setItem('favoriteRecipes', JSON.stringify([]));
-  };
-
   useEffect(() => {
     const foodId = getIdFromLocation();
-    getFavoriteLocalStorage(foodId);
+    getFavoriteLocalStorage(foodId, setAllFavorites, setIsFavorite);
     const getFoodDetailsDrinkRecommendation = async () => {
       const { meals } = await getFoodById(foodId);
       const { drinks } = await getFoodsAndDrinks();
@@ -134,7 +126,7 @@ function FoodDetails() {
         </div>
       </section>)
   );
-  const startRecipeButton = (
+  const startRecipeButton = () => (
     <button
       className="start-recipe"
       type="button"
@@ -171,7 +163,7 @@ function FoodDetails() {
           ))}
       </section>
       <footer>
-        { !loading && startRecipeButton }
+        { !loading && startRecipeButton() }
       </footer>
     </div>
   );
