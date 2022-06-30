@@ -27,7 +27,7 @@ export const getMealInProgressLocalStorage = (id, setIsInProgress) => {
     const isThisMealInProgress = mealsKeys
       .some((inProgressId) => inProgressId === id);
     if (isThisMealInProgress) setIsInProgress(true);
-  } else localStorage.setItem('inProgressRecipes', JSON.stringify([]));
+  }
 };
 
 export const getCocktailInProgressLocalStorage = (id, setIsInProgress) => {
@@ -39,5 +39,5 @@ export const getCocktailInProgressLocalStorage = (id, setIsInProgress) => {
     const isThisCocktailInProgress = cocktailsKeys
       .some((inProgressId) => inProgressId === id);
     if (isThisCocktailInProgress) setIsInProgress(true);
-  } else localStorage.setItem('inProgressRecipes', JSON.stringify([]));
+  }
 };

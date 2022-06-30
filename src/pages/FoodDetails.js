@@ -63,20 +63,19 @@ function FoodDetails() {
   const handleFavoriteButton = () => {
     if (isFavorite === whiteHeartIcon) {
       setIsFavorite(blackHeartIcon);
-      localStorage.setItem('favoriteRecipes', JSON.stringify(
-        [
-          ...allFavorites,
-          {
-            id: foodAttributes[0].idMeal,
-            type: 'food',
-            nationality: foodAttributes[0].strArea,
-            category: foodAttributes[0].strCategory,
-            alcoholicOrNot: '',
-            name: foodAttributes[0].strMeal,
-            image: foodAttributes[0].strMealThumb,
-          },
-        ],
-      ));
+      const favorites = [
+        ...allFavorites,
+        {
+          id: foodAttributes[0].idMeal,
+          type: 'food',
+          nationality: foodAttributes[0].strArea,
+          category: foodAttributes[0].strCategory,
+          alcoholicOrNot: '',
+          name: foodAttributes[0].strMeal,
+          image: foodAttributes[0].strMealThumb,
+        },
+      ];
+      localStorage.setItem('favoriteRecipes', JSON.stringify(favorites));
     }
     if (isFavorite === blackHeartIcon) {
       setIsFavorite(whiteHeartIcon);

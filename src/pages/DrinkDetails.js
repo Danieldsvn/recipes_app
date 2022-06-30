@@ -61,22 +61,22 @@ function DrinkDetails() {
   };
 
   const handleFavoriteButton = () => {
+    console.log(drinkAttributes[0]);
     if (isFavorite === whiteHeartIcon) {
       setIsFavorite(blackHeartIcon);
-      localStorage.setItem('favoriteRecipes', JSON.stringify(
-        [
-          ...allFavorites,
-          {
-            id: drinkAttributes[0].idDrink,
-            type: 'drink',
-            nationality: drinkAttributes[0].strArea,
-            category: drinkAttributes[0].strCategory,
-            alcoholicOrNot: drinkAttributes[0].strAlcoholic,
-            name: drinkAttributes[0].strDrink,
-            image: drinkAttributes[0].strDrinkThumb,
-          },
-        ],
-      ));
+      const favorites = [
+        ...allFavorites,
+        {
+          id: drinkAttributes[0].idDrink,
+          type: 'drink',
+          nationality: '',
+          category: drinkAttributes[0].strCategory,
+          alcoholicOrNot: drinkAttributes[0].strAlcoholic,
+          name: drinkAttributes[0].strDrink,
+          image: drinkAttributes[0].strDrinkThumb,
+        },
+      ];
+      localStorage.setItem('favoriteRecipes', JSON.stringify(favorites));
     }
     if (isFavorite === blackHeartIcon) {
       setIsFavorite(whiteHeartIcon);
