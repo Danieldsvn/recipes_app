@@ -10,7 +10,8 @@ import '../styles/FoodDrinkDetails.css';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
-import { getDoneLocalStorage, getFavoriteLocalStorage } from '../hooks/getLocalStorage';
+import { getDoneLocalStorage, getFavoriteLocalStorage,
+  getCocktailInProgressLocalStorage } from '../hooks/getLocalStorage';
 
 function DrinkDetails() {
   const location = useLocation();
@@ -29,6 +30,7 @@ function DrinkDetails() {
   const [isFavorite, setIsFavorite] = useState(whiteHeartIcon);
   const [allFavorites, setAllFavorites] = useState([]);
   const [isDone, setIsDone] = useState(false);
+  const [isInProgress, setIsInProgress] = useState(false);
 
   const getIdFromLocation = () => {
     const locationArray = location.pathname.split('s/', 2);
@@ -40,6 +42,7 @@ function DrinkDetails() {
   useEffect(() => {
     const drinkId = getIdFromLocation();
     getFavoriteLocalStorage(drinkId, setAllFavorites, setIsFavorite, blackHeartIcon);
+    getCocktailInProgressLocalStorage(drinkId, setIsInProgress);
     getDoneLocalStorage(drinkId, setIsDone);
     const getDrinkDetailsFoodRecomedation = async () => {
       const { drinks } = await getDrinkById(drinkId);
@@ -123,7 +126,7 @@ function DrinkDetails() {
       data-testid="start-recipe-btn"
       onClick={ handleStartButtonClick }
     >
-      Start Recipe
+      { !isInProgress ? 'Start Recipe' : 'Continue Recipe'}
     </button>
   );
 
