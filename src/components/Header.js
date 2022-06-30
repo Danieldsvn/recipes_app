@@ -26,11 +26,11 @@ function Header({ pageTitle, search }) {
         <img src={ profileIcon } alt="profile" />
       </button>
 
-      <h2
+      <h3
         data-testid="page-title"
       >
         {pageTitle}
-      </h2>
+      </h3>
 
       { search ? (
         <button
