@@ -10,7 +10,7 @@ import '../styles/FoodDrinkDetails.css';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
-import getFavoriteLocalStorage from '../hooks/getLocalStorage';
+import { getFavoriteLocalStorage } from '../hooks/getLocalStorage';
 
 function DrinkDetails() {
   const location = useLocation();
