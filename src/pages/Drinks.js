@@ -55,6 +55,7 @@ function Drinks() {
     <div>
       <Header pageTitle="Drinks" search />
       <SearchBar />
+      <hr />
       <Filters categories={ categories } callback={ applyFilter } />
       <div className="recipes-list">
         { actualDrinks.map((drink, index) => (

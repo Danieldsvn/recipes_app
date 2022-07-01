@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import '../styles/Filters.css';
 
 function Filters({ categories, callback }) {
   return (

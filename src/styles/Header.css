@@ -1,0 +1,11 @@
+header {
+  background-color: rgb(244, 250, 255);
+  display: flex;
+  justify-content: space-between;
+  top: 0;
+}
+
+.fixTitlePosition {
+  height: 36px;
+  width: 38px;
+}

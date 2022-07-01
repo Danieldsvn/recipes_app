@@ -1,0 +1,4 @@
+button:hover {
+  background-color: rgb(191, 225, 255);
+  transition: 120ms;
+}
