@@ -1,13 +1,40 @@
-# :construction: README customizado em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto no qual você pode customizar e reutilizar todas as vezes que for executar o trybe-publisher.
+# App De Receitas 
 
-Para deixá-lo com a sua cara, basta alterar o seguinte arquivo da sua máquina: ~/.student-repo-publisher/custom/_NEW_README.md
+Último projeto do módulo de front-end na Trybe. É um projeto em grupo. Na aplicação é possível ver, buscar, filtrar, favoritar e acompanhar o progresso de preparação de receitas e drinks! A base de dados é de 2 APIs distintas, uma para comidas e outra para bebidas.
 
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+## Tecnologias empregadas:
+
+Javascript, React.js, e as biblioteca React Testing Library(testes)
+
+## Ferramentas de comunicação empregadas:
+
+* Slack
+* Discord
+* Trello(Kanban)
+
+## Habilidades praticadas
+
+  * Metodologias ágeis SCRUM e KANBAN
+
+  * Context API do React para gerenciar estado
+
+  * Utilizar React Hook useState
+
+  * Utilizar o React Hook useContext
+
+  * Utilizar o React Hook useEffect
+
+  * Testes com React Testing Library
+
+## O que é de minha autoria:
+
+* `./src/components/SearchBar.js`
+* `./src/pages/FoodDetails.js`
+* `./src/pages/DrinkDetails.js`
+* `./src/hooks/getLocalStorage.js`
+* `./src/hooks/getIngredientsAndMesures.js`
+* `./src/hooks/getFoodAndDrinkById.js`
+
+## Como visualizar:
+
+Para executar o projeto faça o clone do repositório, entre na pasta do projeto execute o comando `npm install` e depois `npm start` para visualizar a aplicação no navegador Chrome!
